@@ -4,7 +4,7 @@ export * from "./exponentialBackOff";
 export * from "./mapAsync";
 export * from "./id";
 export * from "./lazyMemo";
-export * from "./Maybe";
+export * as Maybe from "./Maybe";
 export * from "./omit";
 export * from "./pick";
 export * from "./PromiseType";

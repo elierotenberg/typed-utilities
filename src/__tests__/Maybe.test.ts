@@ -1,21 +1,21 @@
-import { isNone, isSome, map, Maybe, none, some, valueOf, valuesOf } from "..";
+import { Maybe } from "..";
 
 test("Maybe", () => {
-  expect(isSome(some(1))).toEqual(true);
-  expect(isNone(some(1))).toEqual(false);
-  expect(isSome(none())).toEqual(false);
-  expect(isNone(none())).toEqual(true);
-  expect(valueOf(some(1))).toEqual(1);
+  expect(Maybe.isSome(Maybe.some(1))).toEqual(true);
+  expect(Maybe.isNone(Maybe.some(1))).toEqual(false);
+  expect(Maybe.isSome(Maybe.none())).toEqual(false);
+  expect(Maybe.isNone(Maybe.none())).toEqual(true);
+  expect(Maybe.valueOf(Maybe.some(1))).toEqual(1);
 
-  const t1 = [1, 2, 3].map(some);
+  const t1 = [1, 2, 3].map(Maybe.some);
   for (const m of t1) {
-    expect(isSome(m));
+    expect(Maybe.isSome(m));
   }
 
-  const keepOdd = (v: number): Maybe<number> =>
-    v % 2 === 1 ? some(v) : none();
+  const keepOdd = (v: number): Maybe.Maybe<number> =>
+    v % 2 === 1 ? Maybe.some(v) : Maybe.none();
 
-  const t2 = t1.map((m) => map(m, keepOdd));
-  expect(t2).toEqual([some(1), none(), some(3)]);
-  expect(valuesOf(t2)).toEqual([1, 3]);
+  const t2 = t1.map((m) => Maybe.map(m, keepOdd));
+  expect(t2).toEqual([Maybe.some(1), Maybe.none(), Maybe.some(3)]);
+  expect(Maybe.valuesOf(t2)).toEqual([1, 3]);
 });

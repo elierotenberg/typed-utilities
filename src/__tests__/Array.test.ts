@@ -1,6 +1,7 @@
 import deepEqual from "fast-deep-equal";
 
 import { containEqualItems, deduplicate, intersection } from "..";
+import { exactlyNone, exactlyOne, exactlyOneOrNone } from "../Array";
 
 describe("Array", () => {
   describe("containEqualItems", () => {
@@ -71,6 +72,24 @@ describe("Array", () => {
       ]);
       expect(intersection([a, c], deepEqual)).toEqual([{ v: 2 }]);
       expect(intersection([a, b, c], deepEqual)).toEqual([{ v: 2 }]);
+    });
+
+    test("exactlyNone", () => {
+      expect(exactlyNone([])).toEqual(null);
+      expect(() => exactlyNone([1])).toThrow();
+      expect(() => exactlyNone([1, 2])).toThrow();
+    });
+
+    test("exactlyOne", () => {
+      expect(() => exactlyOne([])).toThrow();
+      expect(exactlyOne([1])).toEqual(1);
+      expect(() => exactlyOne([1, 2])).toThrow();
+    });
+
+    test("exactlyOneOrNone", () => {
+      expect(exactlyOneOrNone([])).toEqual(null);
+      expect(exactlyOneOrNone([1])).toEqual(1);
+      expect(() => exactlyOneOrNone([1, 2])).toThrow();
     });
   });
 });
