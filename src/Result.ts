@@ -38,3 +38,13 @@ export const tryCatch = <T>(fn: () => T): Result<T> => {
     return of.err(error);
   }
 };
+
+export const tryCatchAsync = async <T>(
+  fn: () => Promise<T>,
+): Promise<Result<T>> => {
+  try {
+    return of.ok(await fn());
+  } catch (error) {
+    return of.err(error);
+  }
+};
