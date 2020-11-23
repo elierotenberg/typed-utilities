@@ -1,15 +1,15 @@
 import * as Either from "./Either";
 
-export type Maybe<T> = Either.Either<T, null>;
+export type Option<T> = Either.Either<T, null>;
 
 export type Some<T> = Either.Left<T>;
 export type None = Either.Right<null>;
 
-export function isSome<T>(maybe: Maybe<T>): maybe is Some<T> {
+export function isSome<T>(maybe: Option<T>): maybe is Some<T> {
   return Either.isLeft(maybe);
 }
 
-export function isNone(maybe: Maybe<unknown>): maybe is None {
+export function isNone(maybe: Option<unknown>): maybe is None {
   return Either.isRight(maybe);
 }
 
@@ -24,7 +24,7 @@ type Match<T, IfSome, IfNone> = {
 };
 
 export const match = <T, IfSome, IfNone>(
-  maybe: Maybe<T>,
+  maybe: Option<T>,
   match: Match<T, IfSome, IfNone>,
 ): IfSome | IfNone => (isSome(maybe) ? match.some(maybe[1]) : match.none());
 

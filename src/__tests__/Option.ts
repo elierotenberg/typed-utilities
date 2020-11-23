@@ -12,7 +12,7 @@ test("Option", () => {
     expect(Option.isSome(m));
   }
 
-  const keepOdd = (v: number): Option.Maybe<number> =>
+  const keepOdd = (v: number): Option.Option<number> =>
     v % 2 === 1 ? Option.of.some(v) : Option.of.none();
 
   const t2 = t1.map((m) =>
