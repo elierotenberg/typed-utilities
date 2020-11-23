@@ -1,10 +1,12 @@
+export * as Either from "./Either";
+export * as Option from "./Option";
+export * as Result from "./Result";
 export * from "./Array";
 export * from "./ConstructorType";
 export * from "./exponentialBackOff";
-export * from "./mapAsync";
 export * from "./id";
 export * from "./lazyMemo";
-export * as Maybe from "./Maybe";
+export * from "./mapAsync";
 export * from "./omit";
 export * from "./pick";
 export * from "./PromiseType";

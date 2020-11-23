@@ -21,7 +21,7 @@ module.exports = {
   rules: {
     "prettier/prettier": [1, { trailingComma: "all", endOfLine: "auto" }],
     "@typescript-eslint/no-unused-vars": [1, { argsIgnorePattern: "^_" }],
-    "@typescript-eslint/no-unused-vars": [1, { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/no-namespace": [0],
     "@typescript-eslint/naming-convention": [
       "error",
       {
