@@ -15,3 +15,4 @@ export * from "./range";
 export * from "./sequenceId";
 export * from "./sleep";
 export * from "./sortByProperty";
+export * from "./useAsync";
