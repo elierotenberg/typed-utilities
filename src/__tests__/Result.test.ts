@@ -11,16 +11,16 @@ describe("Result", () => {
     };
     const res1 = Result.tryCatch(() => divide(1, 10));
     const res2 = Result.tryCatch(() => divide(1, 0));
-    expect(Result.isOk(res1)).toEqual(true);
-    expect(Result.isErr(res1)).toEqual(false);
-    expect(Result.valueOf(res1 as Result.Ok<unknown>)).toEqual(0.1);
-    expect(Result.isOk(res2)).toEqual(false);
-    expect(Result.isErr(res2)).toEqual(true);
-    expect(Result.errorOf(res2 as Result.Err)).toBeInstanceOf(Error);
+    expect(Result.is.ok(res1)).toEqual(true);
+    expect(Result.is.err(res1)).toEqual(false);
+    expect(Result.to.okValue(res1 as Result.Ok<unknown>)).toEqual(0.1);
+    expect(Result.is.ok(res2)).toEqual(false);
+    expect(Result.is.err(res2)).toEqual(true);
+    expect(Result.to.errError(res2 as Result.Err)).toBeInstanceOf(Error);
 
     const t1 = [1, 2, 3].map(Result.of.ok);
     for (const m of t1) {
-      expect(Result.isOk(m)).toEqual(true);
+      expect(Result.is.ok(m)).toEqual(true);
     }
     const isNotOdd = new Error("not odd");
 
@@ -35,7 +35,7 @@ describe("Result", () => {
       Result.of.err(isNotOdd),
       Result.of.ok(3),
     ]);
-    expect(t2.filter(Result.isOk).map(Result.valueOf)).toEqual([1, 3]);
+    expect(t2.filter(Result.is.ok).map(Result.to.okValue)).toEqual([1, 3]);
   });
 
   test("Async", async () => {
@@ -48,16 +48,16 @@ describe("Result", () => {
     };
     const res1 = await Result.tryCatchAsync(async () => await divide(1, 10));
     const res2 = await Result.tryCatchAsync(async () => await divide(1, 0));
-    expect(Result.isOk(res1)).toEqual(true);
-    expect(Result.isErr(res1)).toEqual(false);
-    expect(Result.valueOf(res1 as Result.Ok<unknown>)).toEqual(0.1);
-    expect(Result.isOk(res2)).toEqual(false);
-    expect(Result.isErr(res2)).toEqual(true);
-    expect(Result.errorOf(res2 as Result.Err)).toBeInstanceOf(Error);
+    expect(Result.is.ok(res1)).toEqual(true);
+    expect(Result.is.err(res1)).toEqual(false);
+    expect(Result.to.okValue(res1 as Result.Ok<unknown>)).toEqual(0.1);
+    expect(Result.is.ok(res2)).toEqual(false);
+    expect(Result.is.err(res2)).toEqual(true);
+    expect(Result.to.errError(res2 as Result.Err)).toBeInstanceOf(Error);
 
     const t1 = [1, 2, 3].map(Result.of.ok);
     for (const m of t1) {
-      expect(Result.isOk(m)).toEqual(true);
+      expect(Result.is.ok(m)).toEqual(true);
     }
     const isNotOdd = new Error("not odd");
 
@@ -72,6 +72,6 @@ describe("Result", () => {
       Result.of.err(isNotOdd),
       Result.of.ok(3),
     ]);
-    expect(t2.filter(Result.isOk).map(Result.valueOf)).toEqual([1, 3]);
+    expect(t2.filter(Result.is.ok).map(Result.to.okValue)).toEqual([1, 3]);
   });
 });

@@ -5,17 +5,50 @@ export type Option<T> = Either.Either<T, null>;
 export type Some<T> = Either.Left<T>;
 export type None = Either.Right<null>;
 
-export function isSome<T>(maybe: Option<T>): maybe is Some<T> {
-  return Either.isLeft(maybe);
+function isSome<T>(option: Option<T>): option is Some<T> {
+  return Either.is.left(option);
 }
 
-export function isNone(maybe: Option<unknown>): maybe is None {
-  return Either.isRight(maybe);
+function assertSome<T>(
+  option: Option<T>,
+  message?: string,
+): asserts option is Some<T> {
+  if (!isSome(option)) {
+    throw new TypeError(message ?? "option should be 'some'");
+  }
 }
+
+function isNone(option: Option<unknown>): option is None {
+  return Either.is.right(option);
+}
+
+function assertNone(
+  option: Option<unknown>,
+  message?: string,
+): asserts option is None {
+  if (!isNone(option)) {
+    throw new TypeError(message ?? "option should be 'none'");
+  }
+}
+const someValue = <T>(option: Some<T>): T => option[1];
+
+export const is = {
+  some: isSome,
+  none: isNone,
+};
+
+export const assert = {
+  some: assertSome,
+  none: assertNone,
+};
 
 export const of = {
   some: <T>(value: T): Some<T> => Either.of.left(value),
   none: (): None => Either.of.right(null),
+};
+
+export const to = {
+  someValue: someValue,
 };
 
 type Match<T, IfSome, IfNone> = {
@@ -24,8 +57,6 @@ type Match<T, IfSome, IfNone> = {
 };
 
 export const match = <T, IfSome, IfNone>(
-  maybe: Option<T>,
+  option: Option<T>,
   match: Match<T, IfSome, IfNone>,
-): IfSome | IfNone => (isSome(maybe) ? match.some(maybe[1]) : match.none());
-
-export const valueOf = <T>(maybe: Some<T>): T => maybe[1];
+): IfSome | IfNone => (isSome(option) ? match.some(option[1]) : match.none());

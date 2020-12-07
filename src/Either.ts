@@ -7,13 +7,49 @@ export type Left<T> = [tag: EitherTag.Left, value: T];
 export type Right<T> = [tag: EitherTag.Right, value: T];
 export type Either<L, R> = Left<L> | Right<R>;
 
-export function isLeft<L>(either: Either<L, unknown>): either is Left<L> {
+function isLeft<L>(either: Either<L, unknown>): either is Left<L> {
   return either[0] === EitherTag.Left;
 }
 
-export function isRight<R>(either: Either<unknown, R>): either is Right<R> {
+function assertLeft<L>(
+  either: Either<L, unknown>,
+  message?: string,
+): asserts either is Left<L> {
+  if (!isLeft(either)) {
+    throw new TypeError(message ?? "either should be 'left'");
+  }
+}
+
+function isRight<R>(either: Either<unknown, R>): either is Right<R> {
   return either[0] === EitherTag.Right;
 }
+
+function assertRight<R>(
+  either: Either<unknown, R>,
+  message?: string,
+): asserts either is Right<R> {
+  if (!isRight(either)) {
+    throw new TypeError(message ?? "either should be 'right'");
+  }
+}
+
+const toLeftValue = <L>(either: Left<L>): L => either[1];
+const toRightValue = <R>(either: Right<R>): R => either[1];
+
+export const is = {
+  left: isLeft,
+  right: isRight,
+};
+
+export const to = {
+  leftValue: toLeftValue,
+  rightValue: toRightValue,
+};
+
+export const assert = {
+  left: assertLeft,
+  right: assertRight,
+};
 
 export const of = {
   left: <L>(value: L): Left<L> => [EitherTag.Left, value],
@@ -30,6 +66,3 @@ export const match = <L, R, IfLeft, IfRight>(
   match: Match<L, R, IfLeft, IfRight>,
 ): IfLeft | IfRight =>
   isLeft(either) ? match.left(either[1]) : match.right(either[1]);
-
-export const leftOf = <L>(either: Left<L>): L => either[1];
-export const rightOf = <R>(either: Right<R>): R => either[1];
