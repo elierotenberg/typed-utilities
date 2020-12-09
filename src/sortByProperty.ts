@@ -1,19 +1,28 @@
-// "sortBy" is memoized; instead of creating a new function each time it is called.
+// "sortByProperty" is memoized; instead of creating a new function each time it is called.
+
 // However inner functions (returned by sortBy) are not.
 const sortByPropertyFnCache: {
-  [K in string]: <T extends { [Key in K]?: string }>(a: T, b: T) => number;
+  [CacheIndex in string]: <T extends { [Key in CacheIndex]?: string }>(
+    a: T,
+    b: T,
+  ) => number;
 } = {};
 // Example usage: [{ x: "b" }, { x: "a" }].sort(sortBy("x")) is [{ x: "a" }, { x: "b" }]
-export const sortByProperty = <K extends string>(
-  k: K,
-): (<T extends { [Key in K]?: string }>(a: T, b: T) => number) => {
-  if (!sortByPropertyFnCache[k]) {
-    sortByPropertyFnCache[k] = <T extends { [Key in K]?: string }>(
+export const sortByProperty = <Key extends string>(
+  ...keys: Key[]
+): (<T extends { [K in Key]?: string }>(a: T, b: T) => number) => {
+  const cacheIndex = JSON.stringify(keys);
+  if (!sortByPropertyFnCache[cacheIndex]) {
+    sortByPropertyFnCache[cacheIndex] = <T extends { [K in Key]?: string }>(
       a: T,
       b: T,
     ): number => {
-      const ak = a[k];
-      const bk = b[k];
+      if (keys.length === 0) {
+        return 0;
+      }
+      const [key, ...rest] = keys;
+      const ak = a[key];
+      const bk = b[key];
       if (typeof ak !== "string" && typeof bk !== "string") {
         return 0;
       }
@@ -23,8 +32,12 @@ export const sortByProperty = <K extends string>(
       if (typeof bk !== "string") {
         return 1;
       }
-      return ak.localeCompare(bk);
+      const value = ak.localeCompare(bk);
+      if (value !== 0) {
+        return value;
+      }
+      return sortByProperty(...rest)(a, b);
     };
   }
-  return sortByPropertyFnCache[k];
+  return sortByPropertyFnCache[cacheIndex];
 };
