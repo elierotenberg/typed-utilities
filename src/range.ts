@@ -8,3 +8,8 @@ export const range = (length: number): number[] => {
   }
   return t;
 };
+
+export const inRange = (
+  input: number,
+  range: [min: number, max: number],
+): boolean => input >= range[0] && input <= range[1];

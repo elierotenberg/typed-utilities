@@ -1,4 +1,4 @@
-import { sleep } from "../sleep";
+import { sleep } from "..";
 
 test("sleep", async () => {
   const start = Date.now();

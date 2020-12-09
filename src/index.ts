@@ -4,6 +4,7 @@ export * as Option from "./Option";
 export * as Result from "./Result";
 export * from "./Array";
 export * from "./ConstructorType";
+export * from "./deepTransform";
 export * from "./exponentialBackOff";
 export * from "./id";
 export * from "./lazyMemo";

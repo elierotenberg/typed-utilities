@@ -1,11 +1,9 @@
-import { nextify } from "../Iterator";
-import { range } from "../range";
-import { sequenceIdFn, sequenceIdGenerator } from "../sequenceId";
+import { Iterator, range, sequenceIdFn, sequenceIdGenerator } from "..";
 
 describe("sequenceId", () => {
   describe("sequenceIdGenerator", () => {
     test("unbounded", () => {
-      const seq = nextify(sequenceIdGenerator("test"));
+      const seq = Iterator.nextify(sequenceIdGenerator("test"));
       const ids = range(10).map(() => seq());
       expect(ids).toEqual([
         "test-0",
@@ -22,7 +20,7 @@ describe("sequenceId", () => {
     });
 
     test("bounded", () => {
-      const seq = nextify(sequenceIdGenerator("test", 5));
+      const seq = Iterator.nextify(sequenceIdGenerator("test", 5));
       const ids = range(5).map(() => seq());
       expect(ids).toEqual(["test-0", "test-1", "test-2", "test-3", "test-4"]);
       expect(() => seq()).toThrow();

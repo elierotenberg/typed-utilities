@@ -1,4 +1,4 @@
-import { pick } from "../pick";
+import { pick } from "..";
 
 test("pick", () => {
   const a = {

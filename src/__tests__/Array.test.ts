@@ -1,7 +1,13 @@
 import deepEqual from "fast-deep-equal";
 
-import { containEqualItems, deduplicate, intersection } from "..";
-import { exactlyNone, exactlyOne, exactlyOneOrNone } from "../Array";
+import {
+  containEqualItems,
+  deduplicate,
+  intersection,
+  exactlyNone,
+  exactlyOne,
+  exactlyOneOrNone,
+} from "..";
 
 describe("Array", () => {
   describe("containEqualItems", () => {

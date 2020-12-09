@@ -1,4 +1,4 @@
-import { sortByProperty } from "../sortByProperty";
+import { sortByProperty } from "..";
 
 test("sortByProperty", () => {
   const t1 = {

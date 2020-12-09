@@ -1,4 +1,4 @@
-import { useAsync } from "../useAsync";
+import { useAsync } from "..";
 
 test("useAsync", async () => {
   const counters: Set<Counter> = new Set();

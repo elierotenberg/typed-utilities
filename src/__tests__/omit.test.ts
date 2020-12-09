@@ -1,4 +1,4 @@
-import { omit } from "../omit";
+import { omit } from "..";
 
 test("omit", () => {
   const a = {

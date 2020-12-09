@@ -1,4 +1,4 @@
-import * as Iterator from "../Iterator";
+import { Iterator } from "..";
 
 describe("Iterator", () => {
   test("next", () => {
