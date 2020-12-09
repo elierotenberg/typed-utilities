@@ -13,6 +13,7 @@ export * from "./omit";
 export * from "./pick";
 export * from "./PromiseType";
 export * from "./range";
+export * from "./RegExp";
 export * from "./sequenceId";
 export * from "./sleep";
 export * from "./sortByProperty";
