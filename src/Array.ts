@@ -2,14 +2,14 @@ type Equals<T> = (a: T, b: T) => boolean;
 const strictEquals: Equals<unknown> = (a, b) => a === b;
 
 export const containEqualItems = <T>(
-  a: T[],
-  b: T[],
-  equals = strictEquals,
+  t1: T[],
+  t2: T[],
+  equals: Equals<T> = strictEquals,
 ): boolean =>
-  a.length === b.length &&
-  a.every((aItem) => b.some((bItem) => equals(aItem, bItem)));
+  t1.length === t2.length &&
+  t1.every((aItem) => t2.some((bItem) => equals(aItem, bItem)));
 
-export const deduplicate = <T>(t: T[], equals = strictEquals): T[] =>
+export const deduplicate = <T>(t: T[], equals: Equals<T> = strictEquals): T[] =>
   t.reduce((t, item) => {
     if (!t.find((existingItem) => equals(existingItem, item))) {
       return [...t, item];
