@@ -1,5 +1,4 @@
-import { Result } from "..";
-import { sleep } from "../sleep";
+import { Result, sleep } from "..";
 
 describe("Result", () => {
   test("Sync", () => {

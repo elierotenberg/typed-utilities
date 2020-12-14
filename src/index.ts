@@ -3,6 +3,7 @@ export * as Iterator from "./Iterator";
 export * as Option from "./Option";
 export * as Result from "./Result";
 export * from "./Array";
+export * from "./Base64DataUri";
 export * from "./ConstructorType";
 export * from "./deepTransform";
 export * from "./exponentialBackOff";

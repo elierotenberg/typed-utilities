@@ -1,5 +1,4 @@
-import { range } from "../range";
-import { dateIsoStringRegExp, naiveEmailRegExp } from "../RegExp";
+import { range, dateIsoStringRegExp, naiveEmailRegExp } from "..";
 
 describe("RegExp", () => {
   test("dateIsoStringRegExp", () => {

@@ -1,6 +1,6 @@
 import { dotCase, pathCase } from "change-case";
 
-import { deepTransform } from "../deepTransform";
+import { deepTransform } from "..";
 
 describe("deepTransform", () => {
   test("transform basic types", () => {
