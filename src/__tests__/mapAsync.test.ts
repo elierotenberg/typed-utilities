@@ -11,7 +11,8 @@ describe("MapAsync", () => {
     expect(await mapAsyncSerial([300, 100, 200], fn)).toEqual([300, 100, 200]);
     expect(log).toEqual([300, 100, 200]);
   });
-  test("mapAsyncConcurrent", async () => {
+
+  test("mapAsyncConcurrent without rejections", async () => {
     const log: number[] = [];
     const fn = async (value: number): Promise<number> => {
       await sleep(value);
@@ -24,5 +25,34 @@ describe("MapAsync", () => {
       200,
     ]);
     expect(log).toEqual([100, 200, 300]);
+  });
+
+  test("mapAsyncConcurrent with rejections", async () => {
+    let countTrue = 0;
+    const fn = async ([b, delayMs]: [
+      b: boolean,
+      delayMs: number,
+    ]): Promise<void> => {
+      await sleep(delayMs);
+      if (b) {
+        countTrue++;
+      } else {
+        throw new Error();
+      }
+    };
+    const t = [
+      [true, 10],
+      [true, 30],
+      [false, 20],
+      [true, 50],
+      [false, 100],
+    ] as [boolean, number][];
+    await expect(() => Promise.all(t.map(fn))).rejects.toBeTruthy();
+    expect(countTrue).toEqual(1);
+    await sleep(200);
+    expect(countTrue).toEqual(3);
+    countTrue = 0;
+    await expect(() => mapAsyncConcurrent(t, fn)).rejects.toBeTruthy();
+    expect(countTrue).toEqual(3);
   });
 });

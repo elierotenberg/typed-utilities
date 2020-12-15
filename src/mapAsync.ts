@@ -18,5 +18,10 @@ export const mapAsyncConcurrent: MapAsync = async <I, T>(
   items: I[],
   fn: (item: I) => Promise<T>,
 ): Promise<T[]> => {
-  return await Promise.all(items.map(fn));
+  return (await Promise.allSettled(items.map(fn))).map((result) => {
+    if (result.status === "rejected") {
+      throw result.reason;
+    }
+    return result.value;
+  });
 };
