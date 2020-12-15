@@ -1,10 +1,12 @@
+import { performance } from "perf_hooks";
+
 import { sleep } from "..";
 
 test("sleep", async () => {
-  const start = Date.now();
+  const start = performance.now();
   await sleep(100);
-  const end = Date.now();
+  const end = performance.now();
   const duration = end - start;
-  expect(duration).toBeGreaterThanOrEqual(100);
+  expect(duration).toBeGreaterThanOrEqual(90);
   expect(duration).toBeLessThan(200);
 });
