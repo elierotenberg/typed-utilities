@@ -17,7 +17,10 @@ export const deduplicate = <T>(t: T[], equals: Equals<T> = strictEquals): T[] =>
     return t;
   }, [] as T[]);
 
-export const intersection = <T>(arrays: T[][], equals = strictEquals): T[] =>
+export const intersection = <T>(
+  arrays: T[][],
+  equals: Equals<T> = strictEquals,
+): T[] =>
   arrays.length === 0
     ? []
     : deduplicate(
