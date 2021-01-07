@@ -1,6 +1,6 @@
 {
   "name": "typed-utilities",
-  "version": "1.5.9",
+  "version": "1.5.10",
   "description": "Strongly typed general purpose utilities",
   "main": "build/index.js",
   "scripts": {
@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/elierotenberg/typed-utilities#readme",
   "devDependencies": {
-    "@types/jest": "^26.0.19",
+    "@types/jest": "^26.0.20",
     "@types/node": "^14.14.20",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",

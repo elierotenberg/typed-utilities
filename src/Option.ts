@@ -30,7 +30,7 @@ function assertNone(
     throw new TypeError(message ?? "option should be 'none'");
   }
 }
-const someValue = <T>(option: Some<T>): T => option[1];
+const toSomeValue = <T>(option: Some<T>): T => option[1];
 
 export const is = {
   some: isSome,
@@ -48,7 +48,7 @@ export const of = {
 };
 
 export const to = {
-  someValue: someValue,
+  someValue: toSomeValue,
 };
 
 type Match<T, IfSome, IfNone> = {
