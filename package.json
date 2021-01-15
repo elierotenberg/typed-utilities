@@ -1,9 +1,10 @@
 {
   "name": "typed-utilities",
-  "version": "1.5.11",
+  "version": "1.6.0",
   "description": "Strongly typed general purpose utilities",
   "main": "build/index.js",
   "scripts": {
+    "test:only": "jest",
     "test:src": "jest src/__tests__/**.test.ts",
     "test:build": "jest build/__tests__/*.test.js",
     "clean:ts": "rm -rf build",

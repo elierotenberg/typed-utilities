@@ -1,4 +1,5 @@
 export * as AsyncResult from "./AsyncResult";
+export * as Deferred from "./Deferred";
 export * as Either from "./Either";
 export * as Iterator from "./Iterator";
 export * as Option from "./Option";
