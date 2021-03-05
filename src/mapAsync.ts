@@ -7,21 +7,37 @@ export const mapAsyncSerial: MapAsync = async <I, T>(
   items: I[],
   fn: (item: I) => Promise<T>,
 ): Promise<T[]> => {
-  const results: T[] = [];
+  const values: T[] = [];
+  const errors: unknown[] = [];
   for (const item of items) {
-    results.push(await fn(item));
+    try {
+      values.push(await fn(item));
+    } catch (error) {
+      errors.push(error);
+    }
   }
-  return results;
+  if (errors.length > 0) {
+    throw new AggregateError(errors);
+  }
+  return values;
 };
 
 export const mapAsyncConcurrent: MapAsync = async <I, T>(
   items: I[],
   fn: (item: I) => Promise<T>,
 ): Promise<T[]> => {
-  return (await Promise.allSettled(items.map(fn))).map((result) => {
-    if (result.status === "rejected") {
-      throw result.reason;
+  const values: T[] = [];
+  const errors: unknown[] = [];
+  const results = await Promise.allSettled(items.map(fn));
+  for (const result of results) {
+    if (result.status === "fulfilled") {
+      values.push(result.value);
+    } else {
+      errors.push(result.reason);
     }
-    return result.value;
-  });
+  }
+  if (errors.length > 0) {
+    throw new AggregateError(errors);
+  }
+  return values;
 };
