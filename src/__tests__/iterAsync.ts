@@ -1,4 +1,5 @@
-import { mapAsyncConcurrent, mapAsyncSerial, sleep } from "..";
+import { mapAsyncConcurrent, mapAsyncSerial, sleep, AggregateError } from "..";
+import { resolveAllConcurrent, resolveAllSerial } from "../iterAsync";
 
 describe("MapAsync", () => {
   test("mapAsyncSerial", async () => {
@@ -29,7 +30,7 @@ describe("MapAsync", () => {
 
   test("mapAsyncConcurrent with rejections", async () => {
     let countTrue = 0;
-    const fn = async ([b, delayMs]: [
+    const fn = async ([b, delayMs]: readonly [
       b: boolean,
       delayMs: number,
     ]): Promise<void> => {
@@ -46,7 +47,7 @@ describe("MapAsync", () => {
       [false, 20],
       [true, 50],
       [false, 100],
-    ] as [boolean, number][];
+    ] as const;
     await expect(() => Promise.all(t.map(fn))).rejects.toBeTruthy();
     expect(countTrue).toEqual(1);
     await sleep(200);
@@ -54,5 +55,19 @@ describe("MapAsync", () => {
     countTrue = 0;
     await expect(() => mapAsyncConcurrent(t, fn)).rejects.toBeTruthy();
     expect(countTrue).toEqual(3);
+    await expect(() => mapAsyncConcurrent(t, fn)).rejects.toBeInstanceOf(
+      AggregateError,
+    );
+    expect(countTrue).toEqual(6);
+  });
+
+  test("resolveAllSerial, resolveAllConcurrent with identity (Promise.all-like)", async () => {
+    const items = [
+      Promise.resolve(1),
+      Promise.resolve(null),
+      Promise.resolve(3),
+    ] as const;
+    expect(await resolveAllSerial(items)).toEqual([1, null, 3]);
+    expect(await resolveAllConcurrent(items)).toEqual([1, null, 3]);
   });
 });
