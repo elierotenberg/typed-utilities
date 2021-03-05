@@ -77,8 +77,8 @@ type ResolveAll = {
   ): Promise<readonly [T1, T2, T3, T4, T5, T6]>;
 };
 
-export const resolveAllSerial = (((...items: Promise<unknown>[]) =>
-  mapAsyncSerial(items, id)) as unknown) as ResolveAll;
+export const resolveAllSerial = (((values: Promise<unknown>[]) =>
+  mapAsyncSerial(values, id)) as unknown) as ResolveAll;
 
-export const resolveAllConcurrent = (((...items: Promise<unknown>[]) =>
-  mapAsyncConcurrent(items, id)) as unknown) as ResolveAll;
+export const resolveAllConcurrent = (((values: Promise<unknown>[]) =>
+  mapAsyncConcurrent(values, id)) as unknown) as ResolveAll;
