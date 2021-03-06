@@ -46,16 +46,15 @@ export const mapAsyncConcurrent: MapAsync = async <I, T>(
 };
 
 type ResolveAll = {
-  <T1>(values: readonly [Promise<T1>]): Promise<readonly [T1]>;
-  <T1, T2>(values: readonly [Promise<T1>, Promise<T2>]): Promise<
-    readonly [T1, T2]
-  >;
+  (values: []): Promise<[]>;
+  <T1>(values: readonly [Promise<T1>]): Promise<[T1]>;
+  <T1, T2>(values: readonly [Promise<T1>, Promise<T2>]): Promise<[T1, T2]>;
   <T1, T2, T3>(
     values: readonly [Promise<T1>, Promise<T2>, Promise<T3>],
-  ): Promise<readonly [T1, T2, T3]>;
+  ): Promise<[T1, T2, T3]>;
   <T1, T2, T3, T4>(
     values: readonly [Promise<T1>, Promise<T2>, Promise<T3>, Promise<T4>],
-  ): Promise<readonly [T1, T2, T3, T4]>;
+  ): Promise<[T1, T2, T3, T4]>;
   <T1, T2, T3, T4, T5>(
     values: readonly [
       Promise<T1>,
@@ -64,7 +63,7 @@ type ResolveAll = {
       Promise<T4>,
       Promise<T5>,
     ],
-  ): Promise<readonly [T1, T2, T3, T4, T5]>;
+  ): Promise<[T1, T2, T3, T4, T5]>;
   <T1, T2, T3, T4, T5, T6>(
     values: readonly [
       Promise<T1>,
@@ -74,7 +73,7 @@ type ResolveAll = {
       Promise<T5>,
       Promise<T6>,
     ],
-  ): Promise<readonly [T1, T2, T3, T4, T5, T6]>;
+  ): Promise<[T1, T2, T3, T4, T5, T6]>;
 };
 
 export const resolveAllSerial = (((values: Promise<unknown>[]) =>

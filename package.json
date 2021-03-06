@@ -1,6 +1,6 @@
 {
   "name": "typed-utilities",
-  "version": "1.7.2",
+  "version": "1.7.4",
   "description": "Strongly typed general purpose utilities",
   "main": "build/index.js",
   "scripts": {

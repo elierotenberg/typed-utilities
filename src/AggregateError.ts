@@ -1,4 +1,12 @@
-class AggregateErrorPolyfill extends Error {
+interface IAggregateError extends Error {
+  errors: unknown[];
+}
+
+interface IAggregateErrorConstructor {
+  new (errors: Iterable<unknown>, message?: string): IAggregateError;
+}
+
+class AggregateErrorPolyfill extends Error implements IAggregateError {
   public errors: unknown[];
   public constructor(errors: Iterable<unknown>, message?: string) {
     super(message);
@@ -8,7 +16,7 @@ class AggregateErrorPolyfill extends Error {
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const ExportedAggregateError =
+const ExportedAggregateError: IAggregateErrorConstructor =
   typeof AggregateError === "undefined"
     ? AggregateErrorPolyfill
     : AggregateError;
