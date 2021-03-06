@@ -4,7 +4,7 @@ import { id } from "./id";
 export type MapAsync = <I, T>(
   items: readonly I[],
   fn: (item: I) => Promise<T>,
-) => Promise<readonly T[]>;
+) => Promise<T[]>;
 
 export const mapAsyncSerial: MapAsync = async <I, T>(
   items: readonly I[],
@@ -46,7 +46,7 @@ export const mapAsyncConcurrent: MapAsync = async <I, T>(
 };
 
 type ResolveAll = {
-  (values: []): Promise<[]>;
+  (values: readonly []): Promise<[]>;
   <T1>(values: readonly [Promise<T1>]): Promise<[T1]>;
   <T1, T2>(values: readonly [Promise<T1>, Promise<T2>]): Promise<[T1, T2]>;
   <T1, T2, T3>(
@@ -76,8 +76,8 @@ type ResolveAll = {
   ): Promise<[T1, T2, T3, T4, T5, T6]>;
 };
 
-export const resolveAllSerial = (((values: Promise<unknown>[]) =>
+export const resolveAllSerial = (((values: readonly Promise<unknown>[]) =>
   mapAsyncSerial(values, id)) as unknown) as ResolveAll;
 
-export const resolveAllConcurrent = (((values: Promise<unknown>[]) =>
+export const resolveAllConcurrent = (((values: readonly Promise<unknown>[]) =>
   mapAsyncConcurrent(values, id)) as unknown) as ResolveAll;
