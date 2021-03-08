@@ -1,4 +1,6 @@
-import { mapAsyncConcurrent, mapAsyncSerial, sleep, AggregateError } from "..";
+import AggregateError from "aggregate-error";
+
+import { mapAsyncConcurrent, mapAsyncSerial, sleep } from "..";
 import { resolveAllConcurrent, resolveAllSerial } from "../iterAsync";
 
 describe("MapAsync", () => {

@@ -1,4 +1,5 @@
-import { AggregateError } from "./AggregateError";
+import AggregateError from "aggregate-error";
+
 import { id } from "./id";
 
 export type MapAsync = <I, T>(
@@ -11,7 +12,7 @@ export const mapAsyncSerial: MapAsync = async <I, T>(
   fn: (item: I) => Promise<T>,
 ): Promise<T[]> => {
   const values: T[] = [];
-  const errors: unknown[] = [];
+  const errors: Error[] = [];
   for (const item of items) {
     try {
       values.push(await fn(item));
@@ -30,7 +31,7 @@ export const mapAsyncConcurrent: MapAsync = async <I, T>(
   fn: (item: I) => Promise<T>,
 ): Promise<T[]> => {
   const values: T[] = [];
-  const errors: unknown[] = [];
+  const errors: Error[] = [];
   const results = await Promise.allSettled(items.map(fn));
   for (const result of results) {
     if (result.status === "fulfilled") {
