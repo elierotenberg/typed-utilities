@@ -1,3 +1,6 @@
+import AggregateError from "aggregate-error";
+
+export { AggregateError };
 export * as AsyncResult from "./AsyncResult";
 export * as Deferred from "./Deferred";
 export * as Either from "./Either";
