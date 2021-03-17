@@ -5,16 +5,19 @@ enum AsyncResultTag {
 }
 
 export type Pending = [tag: AsyncResultTag.Pending];
-export type Rejected = [tag: AsyncResultTag.Rejected, error: Error];
-export type Resolved<T> = [tag: AsyncResultTag.Resolved, value: T];
-export type AsyncResult<T> = Pending | Rejected | Resolved<T>;
+export type Rejected<Error> = [tag: AsyncResultTag.Rejected, error: Error];
+export type Resolved<Value> = [tag: AsyncResultTag.Resolved, value: Value];
+export type AsyncResult<Value = unknown, Error = unknown> =
+  | Pending
+  | Rejected<Error>
+  | Resolved<Value>;
 
-function isPending(result: AsyncResult<unknown>): result is Pending {
+function isPending(result: AsyncResult<unknown, unknown>): result is Pending {
   return result[0] === AsyncResultTag.Pending;
 }
 
 function assertPending(
-  result: AsyncResult<unknown>,
+  result: AsyncResult<unknown, unknown>,
   message?: string,
 ): asserts result is Pending {
   if (!isPending(result)) {
@@ -22,34 +25,40 @@ function assertPending(
   }
 }
 
-function isRejected(result: AsyncResult<unknown>): result is Rejected {
+function isRejected<Error = unknown>(
+  result: AsyncResult<unknown, Error>,
+): result is Rejected<Error> {
   return result[0] === AsyncResultTag.Rejected;
 }
 
-function assertRejected(
-  result: AsyncResult<unknown>,
+function assertRejected<Error = unknown>(
+  result: AsyncResult<unknown, Error>,
   message?: string,
-): asserts result is Rejected {
+): asserts result is Rejected<Error> {
   if (!isRejected(result)) {
     throw new TypeError(message ?? "asyncValue should be 'rejected'");
   }
 }
 
-function isResolved<T>(result: AsyncResult<T>): result is Resolved<T> {
+function isResolved<Value = unknown>(
+  result: AsyncResult<Value, unknown>,
+): result is Resolved<Value> {
   return result[0] === AsyncResultTag.Resolved;
 }
 
-function assertResolved<T>(
-  result: AsyncResult<T>,
+function assertResolved<Value = unknown>(
+  result: AsyncResult<Value>,
   message?: string,
-): asserts result is Resolved<T> {
+): asserts result is Resolved<Value> {
   if (!isResolved(result)) {
     throw new TypeError(message ?? "asyncValue should be 'resolved'");
   }
 }
 
-const resolvedValue = <T>(resolved: Resolved<T>): T => resolved[1];
-const rejectedError = (rejected: Rejected): Error => rejected[1];
+const resolvedValue = <Value = unknown>(resolved: Resolved<Value>): Value =>
+  resolved[1];
+const rejectedError = <Error = unknown>(rejected: Rejected<Error>): Error =>
+  rejected[1];
 
 export const is = {
   pending: isPending,
@@ -65,8 +74,14 @@ export const assert = {
 
 export const of = {
   pending: (): Pending => [AsyncResultTag.Pending],
-  rejected: (error: Error): Rejected => [AsyncResultTag.Rejected, error],
-  resolved: <T>(value: T): Resolved<T> => [AsyncResultTag.Resolved, value],
+  rejected: <Error = unknown>(error: Error): Rejected<Error> => [
+    AsyncResultTag.Rejected,
+    error,
+  ],
+  resolved: <Value = unknown>(value: Value): Resolved<Value> => [
+    AsyncResultTag.Resolved,
+    value,
+  ],
 };
 
 export const to = {
@@ -74,15 +89,27 @@ export const to = {
   rejectedError,
 };
 
-type Match<T, IfPending, IfRejected, IfResolved> = {
+type Match<
+  IfPending,
+  IfRejected,
+  IfResolved,
+  Value = unknown,
+  Error = unknown
+> = {
   readonly pending: () => IfPending;
   readonly rejected: (error: Error) => IfRejected;
-  readonly resolved: (value: T) => IfResolved;
+  readonly resolved: (value: Value) => IfResolved;
 };
 
-export const match = <T, IfPending, IfRejected, IfResolved>(
-  result: AsyncResult<T>,
-  match: Match<T, IfPending, IfRejected, IfResolved>,
+export const match = <
+  IfPending,
+  IfRejected,
+  IfResolved,
+  Value = unknown,
+  Error = unknown
+>(
+  result: AsyncResult<Value, Error>,
+  match: Match<IfPending, IfRejected, IfResolved, Value, Error>,
 ): IfPending | IfRejected | IfResolved =>
   isPending(result)
     ? match.pending()

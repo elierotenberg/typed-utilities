@@ -1,38 +1,42 @@
 import * as Either from "./Either";
 
 import { Result } from ".";
-export type Ok<T> = Either.Left<T>;
-export type Err = Either.Right<Error>;
-export type Result<T> = Ok<T> | Err;
+export type Ok<Value = unknown> = Either.Left<Value>;
+export type Err<Error = unknown> = Either.Right<Error>;
+export type Result<Value = unknown, Error = unknown> = Ok<Value> | Err<Error>;
 
-function isOk<T>(result: Result<T>): result is Ok<T> {
+function isOk<Value = unknown>(
+  result: Result<Value, unknown>,
+): result is Ok<Value> {
   return Either.is.left(result);
 }
 
-function assertOk<T>(
-  result: Result<T>,
+function assertOk<Value = unknown>(
+  result: Result<Value, unknown>,
   message?: string,
-): asserts result is Ok<T> {
+): asserts result is Ok<Value> {
   if (!isOk(result)) {
     throw new TypeError(message ?? "result should be 'ok'");
   }
 }
 
-function isErr(result: Result<unknown>): result is Err {
+function isErr<Error = unknown>(
+  result: Result<unknown, Error>,
+): result is Err<Error> {
   return Either.is.right(result);
 }
 
-function assertErr(
-  result: Result<unknown>,
+function assertErr<Error = unknown>(
+  result: Result<unknown, Error>,
   message?: string,
-): asserts result is Err {
+): asserts result is Err<Error> {
   if (!isErr(result)) {
     throw new TypeError(message ?? "result should be 'err'");
   }
 }
 
-const toOkValue = <T>(result: Ok<T>): T => result[1];
-const toErrError = (result: Err): Error => result[1];
+const toOkValue = <Value = unknown>(result: Ok<Value>): Value => result[1];
+const toErrError = <Error = unknown>(result: Err<Error>): Error => result[1];
 
 export const is = {
   ok: isOk,
@@ -45,8 +49,8 @@ export const assert = {
 };
 
 export const of = {
-  ok: <T>(value: T): Ok<T> => Either.of.left(value),
-  err: (error: Error): Err => Either.of.right(error),
+  ok: <Value = unknown>(value: Value): Ok<Value> => Either.of.left(value),
+  err: <Error = unknown>(error: Error): Err => Either.of.right(error),
 };
 
 export const to = {
@@ -54,14 +58,14 @@ export const to = {
   errError: toErrError,
 };
 
-type Match<T, IfOk, IfErr> = {
-  readonly ok: (value: T) => IfOk;
+type Match<IfOk, IfErr, Value = unknown, Error = unknown> = {
+  readonly ok: (value: Value) => IfOk;
   readonly err: (error: Error) => IfErr;
 };
 
-export const match = <T, IfOk, IfErr>(
-  result: Result<T>,
-  match: Match<T, IfOk, IfErr>,
+export const match = <IfOk, IfErr, Value = unknown, Error = unknown>(
+  result: Result<Value, Error>,
+  match: Match<IfOk, IfErr, Value, Error>,
 ): IfOk | IfErr => (isOk(result) ? match.ok(result[1]) : match.err(result[1]));
 
 export const tryCatch = <T>(fn: () => T): Result<T> => {
