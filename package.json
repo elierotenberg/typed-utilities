@@ -1,6 +1,6 @@
 {
   "name": "typed-utilities",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "Strongly typed general purpose utilities",
   "main": "build/index.js",
   "scripts": {
@@ -33,12 +33,12 @@
   },
   "homepage": "https://github.com/elierotenberg/typed-utilities#readme",
   "devDependencies": {
-    "@types/jest": "^26.0.21",
-    "@types/node": "^14.14.35",
-    "@typescript-eslint/eslint-plugin": "^4.18.0",
-    "@typescript-eslint/parser": "^4.18.0",
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.37",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
     "change-case": "^4.1.2",
-    "eslint": "^7.22.0",
+    "eslint": "^7.23.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.3.1",

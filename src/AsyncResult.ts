@@ -125,50 +125,51 @@ export const match = <
     ? match.rejected(to.rejectedError(result))
     : match.resolved(to.resolvedValue(result));
 
+type DefaultError<T> = T extends Error ? T : Error;
+
 type Join = {
   (values: readonly []): AsyncResult<[]>;
-  <V1, E1 extends Error>(values: readonly [AsyncResult<V1, E1>]): AsyncResult<
+  <V1, E1 = unknown>(values: readonly [AsyncResult<V1, E1>]): AsyncResult<
     [V1],
-    AggregateError<E1>
+    AggregateError<DefaultError<E1>>
   >;
-  <V1, E1 extends Error, V2, E2 extends Error>(
+  <V1, V2, E1 = unknown, E2 = unknown>(
     values: readonly [AsyncResult<V1, E1>, AsyncResult<V2, E2>],
-  ): AsyncResult<[V1, V2], AggregateError<E1 | E2>>;
-  <V1, E1 extends Error, V2, E2 extends Error, V3, E3 extends Error>(
+  ): AsyncResult<[V1, V2], AggregateError<DefaultError<E1> | DefaultError<E2>>>;
+  <V1, E1, V2, E2, V3, E3>(
     values: readonly [
       AsyncResult<V1, E1>,
       AsyncResult<V2, E2>,
       AsyncResult<V3, E3>,
     ],
-  ): AsyncResult<[V1, V2, V3], AggregateError<E1 | E2 | E3>>;
-  <
-    V1,
-    E1 extends Error,
-    V2,
-    E2 extends Error,
-    V3,
-    E3 extends Error,
-    V4,
-    E4 extends Error
-  >(
+  ): AsyncResult<
+    [V1, V2, V3],
+    AggregateError<DefaultError<E1> | DefaultError<E2> | DefaultError<E3>>
+  >;
+  <V1, V2, V3, V4, E1 = unknown, E2 = unknown, E3 = unknown, E4 = unknown>(
     values: readonly [
       AsyncResult<V1, E1>,
       AsyncResult<V2, E2>,
       AsyncResult<V3, E3>,
       AsyncResult<V4, E4>,
     ],
-  ): AsyncResult<[V1, V2, V3, V4], AggregateError<E1 | E2 | E3 | E4>>;
+  ): AsyncResult<
+    [V1, V2, V3, V4],
+    AggregateError<
+      DefaultError<E1> | DefaultError<E2> | DefaultError<E3> | DefaultError<E4>
+    >
+  >;
   <
     V1,
-    E1 extends Error,
     V2,
-    E2 extends Error,
     V3,
-    E3 extends Error,
     V4,
-    E4 extends Error,
     V5,
-    E5 extends Error
+    E1 = unknown,
+    E2 = unknown,
+    E3 = unknown,
+    E4 = unknown,
+    E5 = unknown
   >(
     values: readonly [
       AsyncResult<V1, E1>,
@@ -177,20 +178,29 @@ type Join = {
       AsyncResult<V4, E4>,
       AsyncResult<V5, E5>,
     ],
-  ): AsyncResult<[V1, V2, V3, V4, V5], AggregateError<E1 | E2 | E3 | E4 | E5>>;
+  ): AsyncResult<
+    [V1, V2, V3, V4, V5],
+    AggregateError<
+      | DefaultError<E1>
+      | DefaultError<E2>
+      | DefaultError<E3>
+      | DefaultError<E4>
+      | DefaultError<E5>
+    >
+  >;
   <
     V1,
-    E1 extends Error,
     V2,
-    E2 extends Error,
     V3,
-    E3 extends Error,
     V4,
-    E4 extends Error,
     V5,
-    E5 extends Error,
     V6,
-    E6 extends Error
+    E1 = unknown,
+    E2 = unknown,
+    E3 = unknown,
+    E4 = unknown,
+    E5 = unknown,
+    E6 = unknown
   >(
     values: readonly [
       AsyncResult<V1, E1>,
@@ -202,11 +212,18 @@ type Join = {
     ],
   ): AsyncResult<
     [V1, V2, V3, V4, V5, V6],
-    AggregateError<E1 | E2 | E3 | E4 | E5 | E6>
+    AggregateError<
+      | DefaultError<E1>
+      | DefaultError<E2>
+      | DefaultError<E3>
+      | DefaultError<E4>
+      | DefaultError<E5>
+      | DefaultError<E6>
+    >
   >;
-  <T, E extends Error>(values: readonly AsyncResult<T>[]): AsyncResult<
+  <T, E = unknown>(values: readonly AsyncResult<T>[]): AsyncResult<
     T[],
-    AggregateError<E>
+    AggregateError<DefaultError<E>>
   >;
 };
 

@@ -44,7 +44,7 @@ describe("AsyncResult", () => {
   });
 
   test("join", () => {
-    const error1 = new Error("error1");
+    const error1 = new SyntaxError("error1");
     const error2 = new TypeError("error2");
 
     expect(AsyncResult.join([])).toEqual(AsyncResult.of.resolved([]));
@@ -65,7 +65,7 @@ describe("AsyncResult", () => {
     ] as const;
     const j1: AsyncResult.AsyncResult<
       [never, never, null],
-      Error
+      AggregateError<SyntaxError>
     > = AsyncResult.join(t1);
     expect(j1).toEqual(AsyncResult.of.pending());
 
@@ -73,9 +73,10 @@ describe("AsyncResult", () => {
       AsyncResult.of.rejected(error1),
       AsyncResult.of.resolved(null),
     ] as const;
-    const j2: AsyncResult.AsyncResult<[never, null], Error> = AsyncResult.join(
-      t2,
-    );
+    const j2: AsyncResult.AsyncResult<
+      [never, null],
+      SyntaxError
+    > = AsyncResult.join(t2);
     expect(j2).toEqual(AsyncResult.of.rejected(new AggregateError([error1])));
 
     const t3 = [
@@ -85,7 +86,7 @@ describe("AsyncResult", () => {
     ] as const;
     const j3: AsyncResult.AsyncResult<
       [null, never, never],
-      Error | TypeError
+      AggregateError<SyntaxError | TypeError>
     > = AsyncResult.join(t3);
     expect(j3).toEqual(
       AsyncResult.of.rejected(new AggregateError([error1, error2])),
@@ -97,7 +98,8 @@ describe("AsyncResult", () => {
       AsyncResult.of.resolved(["a"] as const),
     ] as const;
     const j4: AsyncResult.AsyncResult<
-      [null, 0, readonly ["a"]]
+      [null, 0, readonly ["a"]],
+      AggregateError<never>
     > = AsyncResult.join(t4);
     expect(j4).toEqual(AsyncResult.of.resolved([null, 0, ["a"]]));
 
