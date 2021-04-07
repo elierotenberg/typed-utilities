@@ -1,6 +1,4 @@
-import AggregateError from "aggregate-error";
-
-import { AsyncResult } from ".";
+import { AggregateError, AsyncResult } from ".";
 
 enum AsyncResultTag {
   Pending = "pending",
@@ -125,106 +123,44 @@ export const match = <
     ? match.rejected(to.rejectedError(result))
     : match.resolved(to.resolvedValue(result));
 
-type DefaultError<T> = T extends Error ? T : Error;
-
 type Join = {
   (values: readonly []): AsyncResult<[]>;
-  <V1, E1 = unknown>(values: readonly [AsyncResult<V1, E1>]): AsyncResult<
-    [V1],
-    AggregateError<DefaultError<E1>>
+  <V1>(values: readonly [AsyncResult<V1>]): AsyncResult<[V1], AggregateError>;
+  <V1, V2>(values: readonly [AsyncResult<V1>, AsyncResult<V2>]): AsyncResult<
+    [V1, V2],
+    AggregateError
   >;
-  <V1, V2, E1 = unknown, E2 = unknown>(
-    values: readonly [AsyncResult<V1, E1>, AsyncResult<V2, E2>],
-  ): AsyncResult<[V1, V2], AggregateError<DefaultError<E1> | DefaultError<E2>>>;
-  <V1, E1, V2, E2, V3, E3>(
+  <V1, V2, V3>(
+    values: readonly [AsyncResult<V1>, AsyncResult<V2>, AsyncResult<V3>],
+  ): AsyncResult<[V1, V2, V3], AggregateError>;
+  <V1, V2, V3, V4>(
     values: readonly [
-      AsyncResult<V1, E1>,
-      AsyncResult<V2, E2>,
-      AsyncResult<V3, E3>,
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
     ],
-  ): AsyncResult<
-    [V1, V2, V3],
-    AggregateError<DefaultError<E1> | DefaultError<E2> | DefaultError<E3>>
-  >;
-  <V1, V2, V3, V4, E1 = unknown, E2 = unknown, E3 = unknown, E4 = unknown>(
+  ): AsyncResult<[V1, V2, V3, V4], AggregateError>;
+  <V1, V2, V3, V4, V5>(
     values: readonly [
-      AsyncResult<V1, E1>,
-      AsyncResult<V2, E2>,
-      AsyncResult<V3, E3>,
-      AsyncResult<V4, E4>,
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
     ],
-  ): AsyncResult<
-    [V1, V2, V3, V4],
-    AggregateError<
-      DefaultError<E1> | DefaultError<E2> | DefaultError<E3> | DefaultError<E4>
-    >
-  >;
-  <
-    V1,
-    V2,
-    V3,
-    V4,
-    V5,
-    E1 = unknown,
-    E2 = unknown,
-    E3 = unknown,
-    E4 = unknown,
-    E5 = unknown
-  >(
+  ): AsyncResult<[V1, V2, V3, V4, V5], AggregateError>;
+  <V1, V2, V3, V4, V5, V6>(
     values: readonly [
-      AsyncResult<V1, E1>,
-      AsyncResult<V2, E2>,
-      AsyncResult<V3, E3>,
-      AsyncResult<V4, E4>,
-      AsyncResult<V5, E5>,
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
     ],
-  ): AsyncResult<
-    [V1, V2, V3, V4, V5],
-    AggregateError<
-      | DefaultError<E1>
-      | DefaultError<E2>
-      | DefaultError<E3>
-      | DefaultError<E4>
-      | DefaultError<E5>
-    >
-  >;
-  <
-    V1,
-    V2,
-    V3,
-    V4,
-    V5,
-    V6,
-    E1 = unknown,
-    E2 = unknown,
-    E3 = unknown,
-    E4 = unknown,
-    E5 = unknown,
-    E6 = unknown
-  >(
-    values: readonly [
-      AsyncResult<V1, E1>,
-      AsyncResult<V2, E2>,
-      AsyncResult<V3, E3>,
-      AsyncResult<V4, E4>,
-      AsyncResult<V5, E5>,
-      AsyncResult<V6, E6>,
-    ],
-  ): AsyncResult<
-    [V1, V2, V3, V4, V5, V6],
-    AggregateError<
-      | DefaultError<E1>
-      | DefaultError<E2>
-      | DefaultError<E3>
-      | DefaultError<E4>
-      | DefaultError<E5>
-      | DefaultError<E6>
-    >
-  >;
-  <T, E = unknown>(values: readonly AsyncResult<T>[]): AsyncResult<
-    T[],
-    AggregateError<DefaultError<E>>
-  >;
+  ): AsyncResult<[V1, V2, V3, V4, V5, V6], AggregateError>;
+  <T>(values: readonly AsyncResult<T>[]): AsyncResult<T[], AggregateError>;
 };
 
 export const join = ((results: readonly AsyncResult<unknown>[]) => {

@@ -1,6 +1,4 @@
-import AggregateError from "aggregate-error";
-
-import { AsyncResult, range } from "..";
+import { AsyncResult, range, AggregateError } from "..";
 
 describe("AsyncResult", () => {
   test("basic", async () => {
@@ -65,7 +63,7 @@ describe("AsyncResult", () => {
     ] as const;
     const j1: AsyncResult.AsyncResult<
       [never, never, null],
-      AggregateError<SyntaxError>
+      AggregateError
     > = AsyncResult.join(t1);
     expect(j1).toEqual(AsyncResult.of.pending());
 
@@ -86,7 +84,7 @@ describe("AsyncResult", () => {
     ] as const;
     const j3: AsyncResult.AsyncResult<
       [null, never, never],
-      AggregateError<SyntaxError | TypeError>
+      AggregateError
     > = AsyncResult.join(t3);
     expect(j3).toEqual(
       AsyncResult.of.rejected(new AggregateError([error1, error2])),
@@ -99,7 +97,7 @@ describe("AsyncResult", () => {
     ] as const;
     const j4: AsyncResult.AsyncResult<
       [null, 0, readonly ["a"]],
-      AggregateError<never>
+      AggregateError
     > = AsyncResult.join(t4);
     expect(j4).toEqual(AsyncResult.of.resolved([null, 0, ["a"]]));
 

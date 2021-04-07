@@ -1,6 +1,4 @@
-import AggregateError from "aggregate-error";
-
-import { id } from "./id";
+import { id, AggregateError } from ".";
 
 export type MapAsync = <I, T>(
   items: readonly I[],

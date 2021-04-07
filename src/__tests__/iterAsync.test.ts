@@ -1,7 +1,11 @@
-import AggregateError from "aggregate-error";
-
-import { mapAsyncConcurrent, mapAsyncSerial, sleep } from "..";
-import { resolveAllConcurrent, resolveAllSerial } from "../iterAsync";
+import {
+  AggregateError,
+  mapAsyncConcurrent,
+  mapAsyncSerial,
+  sleep,
+  resolveAllConcurrent,
+  resolveAllSerial,
+} from "..";
 
 describe("MapAsync", () => {
   test("mapAsyncSerial", async () => {

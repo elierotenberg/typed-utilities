@@ -1,6 +1,4 @@
-import AggregateError from "aggregate-error";
-
-export { AggregateError };
+export * from "./AggregateError";
 export * as AsyncResult from "./AsyncResult";
 export * as Deferred from "./Deferred";
 export * as Either from "./Either";
