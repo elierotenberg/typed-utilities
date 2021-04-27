@@ -1,4 +1,4 @@
-import { AsyncResult, range, AggregateError } from "..";
+import { AsyncResult, range } from "..";
 
 describe("AsyncResult", () => {
   test("basic", async () => {

@@ -1,4 +1,4 @@
-import { AggregateError, AsyncResult } from ".";
+import { AsyncResult } from ".";
 
 enum AsyncResultTag {
   Pending = "pending",
@@ -124,7 +124,6 @@ export const match = <
     : match.resolved(to.resolvedValue(result));
 
 type Join = {
-  (values: readonly []): AsyncResult<[]>;
   <V1>(values: readonly [AsyncResult<V1>]): AsyncResult<[V1], AggregateError>;
   <V1, V2>(values: readonly [AsyncResult<V1>, AsyncResult<V2>]): AsyncResult<
     [V1, V2],
@@ -160,9 +159,421 @@ type Join = {
       AsyncResult<V6>,
     ],
   ): AsyncResult<[V1, V2, V3, V4, V5, V6], AggregateError>;
-  <T>(values: readonly AsyncResult<T>[]): AsyncResult<T[], AggregateError>;
+  <V1, V2, V3, V4, V5, V6, V7>(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+    ],
+  ): AsyncResult<[V1, V2, V3, V4, V5, V6, V7], AggregateError>;
+  <V1, V2, V3, V4, V5, V6, V7, V8>(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+      AsyncResult<V8>,
+    ],
+  ): AsyncResult<[V1, V2, V3, V4, V5, V6, V7, V8], AggregateError>;
+  <V1, V2, V3, V4, V5, V6, V7, V8, V9>(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+      AsyncResult<V8>,
+      AsyncResult<V9>,
+    ],
+  ): AsyncResult<[V1, V2, V3, V4, V5, V6, V7, V8, V9], AggregateError>;
+  <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10>(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+      AsyncResult<V8>,
+      AsyncResult<V9>,
+      AsyncResult<V10>,
+    ],
+  ): AsyncResult<[V1, V2, V3, V4, V5, V6, V7, V8, V9, V10], AggregateError>;
+  <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11>(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+      AsyncResult<V8>,
+      AsyncResult<V9>,
+      AsyncResult<V10>,
+      AsyncResult<V11>,
+    ],
+  ): AsyncResult<
+    [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11],
+    AggregateError
+  >;
+  <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12>(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+      AsyncResult<V8>,
+      AsyncResult<V9>,
+      AsyncResult<V10>,
+      AsyncResult<V11>,
+      AsyncResult<V12>,
+    ],
+  ): AsyncResult<
+    [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12],
+    AggregateError
+  >;
+  <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13>(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+      AsyncResult<V8>,
+      AsyncResult<V9>,
+      AsyncResult<V10>,
+      AsyncResult<V11>,
+      AsyncResult<V12>,
+      AsyncResult<V13>,
+    ],
+  ): AsyncResult<
+    [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13],
+    AggregateError
+  >;
+  <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14>(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+      AsyncResult<V8>,
+      AsyncResult<V9>,
+      AsyncResult<V10>,
+      AsyncResult<V11>,
+      AsyncResult<V12>,
+      AsyncResult<V13>,
+      AsyncResult<V14>,
+    ],
+  ): AsyncResult<
+    [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14],
+    AggregateError
+  >;
+  <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15>(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+      AsyncResult<V8>,
+      AsyncResult<V9>,
+      AsyncResult<V10>,
+      AsyncResult<V11>,
+      AsyncResult<V12>,
+      AsyncResult<V13>,
+      AsyncResult<V14>,
+      AsyncResult<V15>,
+    ],
+  ): AsyncResult<
+    [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15],
+    AggregateError
+  >;
+  <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16>(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+      AsyncResult<V8>,
+      AsyncResult<V9>,
+      AsyncResult<V10>,
+      AsyncResult<V11>,
+      AsyncResult<V12>,
+      AsyncResult<V13>,
+      AsyncResult<V14>,
+      AsyncResult<V15>,
+      AsyncResult<V16>,
+    ],
+  ): AsyncResult<
+    [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16],
+    AggregateError
+  >;
+  <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17>(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+      AsyncResult<V8>,
+      AsyncResult<V9>,
+      AsyncResult<V10>,
+      AsyncResult<V11>,
+      AsyncResult<V12>,
+      AsyncResult<V13>,
+      AsyncResult<V14>,
+      AsyncResult<V15>,
+      AsyncResult<V16>,
+      AsyncResult<V17>,
+    ],
+  ): AsyncResult<
+    [
+      V1,
+      V2,
+      V3,
+      V4,
+      V5,
+      V6,
+      V7,
+      V8,
+      V9,
+      V10,
+      V11,
+      V12,
+      V13,
+      V14,
+      V15,
+      V16,
+      V17,
+    ],
+    AggregateError
+  >;
+  <
+    V1,
+    V2,
+    V3,
+    V4,
+    V5,
+    V6,
+    V7,
+    V8,
+    V9,
+    V10,
+    V11,
+    V12,
+    V13,
+    V14,
+    V15,
+    V16,
+    V17,
+    V18
+  >(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+      AsyncResult<V8>,
+      AsyncResult<V9>,
+      AsyncResult<V10>,
+      AsyncResult<V11>,
+      AsyncResult<V12>,
+      AsyncResult<V13>,
+      AsyncResult<V14>,
+      AsyncResult<V15>,
+      AsyncResult<V16>,
+      AsyncResult<V17>,
+      AsyncResult<V18>,
+    ],
+  ): AsyncResult<
+    [
+      V1,
+      V2,
+      V3,
+      V4,
+      V5,
+      V6,
+      V7,
+      V8,
+      V9,
+      V10,
+      V11,
+      V12,
+      V13,
+      V14,
+      V15,
+      V16,
+      V17,
+      V18,
+    ],
+    AggregateError
+  >;
+  <
+    V1,
+    V2,
+    V3,
+    V4,
+    V5,
+    V6,
+    V7,
+    V8,
+    V9,
+    V10,
+    V11,
+    V12,
+    V13,
+    V14,
+    V15,
+    V16,
+    V17,
+    V18,
+    V19
+  >(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+      AsyncResult<V8>,
+      AsyncResult<V9>,
+      AsyncResult<V10>,
+      AsyncResult<V11>,
+      AsyncResult<V12>,
+      AsyncResult<V13>,
+      AsyncResult<V14>,
+      AsyncResult<V15>,
+      AsyncResult<V16>,
+      AsyncResult<V17>,
+      AsyncResult<V18>,
+      AsyncResult<V19>,
+    ],
+  ): AsyncResult<
+    [
+      V1,
+      V2,
+      V3,
+      V4,
+      V5,
+      V6,
+      V7,
+      V8,
+      V9,
+      V10,
+      V11,
+      V12,
+      V13,
+      V14,
+      V15,
+      V16,
+      V17,
+      V18,
+      V19,
+    ],
+    AggregateError
+  >;
+  <
+    V1,
+    V2,
+    V3,
+    V4,
+    V5,
+    V6,
+    V7,
+    V8,
+    V9,
+    V10,
+    V11,
+    V12,
+    V13,
+    V14,
+    V15,
+    V16,
+    V17,
+    V18,
+    V19,
+    V20
+  >(
+    values: readonly [
+      AsyncResult<V1>,
+      AsyncResult<V2>,
+      AsyncResult<V3>,
+      AsyncResult<V4>,
+      AsyncResult<V5>,
+      AsyncResult<V6>,
+      AsyncResult<V7>,
+      AsyncResult<V8>,
+      AsyncResult<V9>,
+      AsyncResult<V10>,
+      AsyncResult<V11>,
+      AsyncResult<V12>,
+      AsyncResult<V13>,
+      AsyncResult<V14>,
+      AsyncResult<V15>,
+      AsyncResult<V16>,
+      AsyncResult<V17>,
+      AsyncResult<V18>,
+      AsyncResult<V19>,
+      AsyncResult<V20>,
+    ],
+  ): AsyncResult<
+    [
+      V1,
+      V2,
+      V3,
+      V4,
+      V5,
+      V6,
+      V7,
+      V8,
+      V9,
+      V10,
+      V11,
+      V12,
+      V13,
+      V14,
+      V15,
+      V16,
+      V17,
+      V18,
+      V19,
+      V20,
+    ],
+    AggregateError
+  >;
+  <V>(values: readonly AsyncResult<V>[]): AsyncResult<V[], AggregateError>;
 };
-
 export const join = ((results: readonly AsyncResult<unknown>[]) => {
   const pending = results.filter(AsyncResult.is.pending);
   const rejected = results.filter(AsyncResult.is.rejected);
