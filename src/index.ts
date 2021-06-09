@@ -4,6 +4,7 @@ export * as Either from "./Either";
 export * as Iterator from "./Iterator";
 export * as Option from "./Option";
 export * as Result from "./Result";
+export * from "./AsyncLock";
 export * from "./ConcurrentError";
 export * from "./Array";
 export * from "./Base64DataUri";

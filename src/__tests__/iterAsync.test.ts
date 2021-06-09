@@ -27,9 +27,7 @@ describe(`MapAsync`, () => {
       return value;
     };
     expect(await mapAsyncConcurrent([300, 100, 200], fn)).toEqual([
-      300,
-      100,
-      200,
+      300, 100, 200,
     ]);
     expect(log).toEqual([100, 200, 300]);
   });
