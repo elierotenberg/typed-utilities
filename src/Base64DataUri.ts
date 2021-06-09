@@ -11,7 +11,7 @@ export const parseBase64DataUri = (
     return null;
   }
   const [, mediaType, base64Data] = result;
-  if (typeof mediaType !== "string" || typeof base64Data !== "string") {
+  if (typeof mediaType !== `string` || typeof base64Data !== `string`) {
     return null;
   }
   return [mediaType, base64Data];

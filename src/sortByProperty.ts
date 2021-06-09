@@ -23,13 +23,13 @@ export const sortByProperty = <Key extends string>(
       const [key, ...rest] = keys;
       const ak = a[key];
       const bk = b[key];
-      if (typeof ak !== "string" && typeof bk !== "string") {
+      if (typeof ak !== `string` && typeof bk !== `string`) {
         return 0;
       }
-      if (typeof ak !== "string") {
+      if (typeof ak !== `string`) {
         return -1;
       }
-      if (typeof bk !== "string") {
+      if (typeof bk !== `string`) {
         return 1;
       }
       const value = ak.localeCompare(bk);

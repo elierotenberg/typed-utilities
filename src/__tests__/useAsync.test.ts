@@ -1,6 +1,6 @@
 import { useAsync } from "..";
 
-test("useAsync", async () => {
+test(`useAsync`, async () => {
   const counters: Set<Counter> = new Set();
   class Counter {
     private state = 0;
@@ -27,14 +27,14 @@ test("useAsync", async () => {
   const stack: number[] = [];
 
   expect(counters.size).toEqual(0);
-  const unused = new Counter("unused");
+  const unused = new Counter(`unused`);
   expect(counters.size).toEqual(1);
   await unused.destroy();
   expect(counters.size).toEqual(0);
 
   const counterValue = await useAsync(
     async () => {
-      return new Counter("counter 1");
+      return new Counter(`counter 1`);
     },
     async (counter) => {
       await counter.destroy();
@@ -62,7 +62,7 @@ test("useAsync", async () => {
   await expect(
     async () =>
       await useAsync(
-        async () => new Counter("counter 2"),
+        async () => new Counter(`counter 2`),
         async (counter) => await counter.destroy(),
         async (counter) => {
           expect(counters.size).toEqual(1);

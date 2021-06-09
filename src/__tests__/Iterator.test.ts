@@ -1,7 +1,7 @@
 import { Iterator } from "..";
 
-describe("Iterator", () => {
-  test("next", () => {
+describe(`Iterator`, () => {
+  test(`next`, () => {
     function* gen(): Iterator<number> {
       yield 1;
       yield 2;
@@ -14,7 +14,7 @@ describe("Iterator", () => {
     expect(() => Iterator.next(iter)).toThrow();
   });
 
-  test("nextify", () => {
+  test(`nextify`, () => {
     function* gen(): Iterator<number> {
       yield 1;
       yield 2;
@@ -28,7 +28,7 @@ describe("Iterator", () => {
     expect(next).toThrow();
   });
 
-  test("runToCompletion", async () => {
+  test(`runToCompletion`, async () => {
     function* gen1(): Iterator<number> {
       yield 1;
       yield 2;
@@ -48,7 +48,7 @@ describe("Iterator", () => {
     ).rejects.toBeTruthy();
   });
 
-  test("withRunToCompletion", async () => {
+  test(`withRunToCompletion`, async () => {
     const fn = Iterator.withRunToCompletion(function* () {
       yield 1;
       yield 2;
@@ -60,7 +60,7 @@ describe("Iterator", () => {
   });
 
   test(
-    "unnested withRunToCompletion",
+    `unnested withRunToCompletion`,
     Iterator.withRunToCompletion(function* () {
       yield 3;
       yield 4;

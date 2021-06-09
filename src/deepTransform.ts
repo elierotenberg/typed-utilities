@@ -15,11 +15,11 @@ export const deepTransform = (
 ): unknown => {
   const transformKey = transform.key ?? id;
   const transformValue = transform.value ?? id;
-  if (typeof input !== "object" || input === null) {
+  if (typeof input !== `object` || input === null) {
     return transformValue(input);
   }
   if (state.backReferences.has(input)) {
-    throw new Error("circular reference");
+    throw new Error(`circular reference`);
   }
 
   if (!state.inputTransformed) {

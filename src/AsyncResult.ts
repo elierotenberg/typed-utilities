@@ -1,9 +1,11 @@
+import { ConcurrentError } from "./ConcurrentError";
+
 import { AsyncResult } from ".";
 
 enum AsyncResultTag {
-  Pending = "pending",
-  Resolved = "resolved",
-  Rejected = "rejected",
+  Pending = `pending`,
+  Resolved = `resolved`,
+  Rejected = `rejected`,
 }
 
 export type Pending = [tag: AsyncResultTag.Pending];
@@ -23,7 +25,7 @@ function assertPending(
   message?: string,
 ): asserts result is Pending {
   if (!isPending(result)) {
-    throw new TypeError(message ?? "asyncValue should be 'pending'");
+    throw new TypeError(message ?? `asyncValue should be 'pending'`);
   }
 }
 
@@ -38,7 +40,7 @@ function assertRejected<Error = unknown>(
   message?: string,
 ): asserts result is Rejected<Error> {
   if (!isRejected(result)) {
-    throw new TypeError(message ?? "asyncValue should be 'rejected'");
+    throw new TypeError(message ?? `asyncValue should be 'rejected'`);
   }
 }
 
@@ -53,7 +55,7 @@ function assertResolved<Value = unknown>(
   message?: string,
 ): asserts result is Resolved<Value> {
   if (!isResolved(result)) {
-    throw new TypeError(message ?? "asyncValue should be 'resolved'");
+    throw new TypeError(message ?? `asyncValue should be 'resolved'`);
   }
 }
 
@@ -124,14 +126,14 @@ export const match = <
     : match.resolved(to.resolvedValue(result));
 
 type Join = {
-  <V1>(values: readonly [AsyncResult<V1>]): AsyncResult<[V1], AggregateError>;
+  <V1>(values: readonly [AsyncResult<V1>]): AsyncResult<[V1], ConcurrentError>;
   <V1, V2>(values: readonly [AsyncResult<V1>, AsyncResult<V2>]): AsyncResult<
     [V1, V2],
-    AggregateError
+    ConcurrentError
   >;
   <V1, V2, V3>(
     values: readonly [AsyncResult<V1>, AsyncResult<V2>, AsyncResult<V3>],
-  ): AsyncResult<[V1, V2, V3], AggregateError>;
+  ): AsyncResult<[V1, V2, V3], ConcurrentError>;
   <V1, V2, V3, V4>(
     values: readonly [
       AsyncResult<V1>,
@@ -139,7 +141,7 @@ type Join = {
       AsyncResult<V3>,
       AsyncResult<V4>,
     ],
-  ): AsyncResult<[V1, V2, V3, V4], AggregateError>;
+  ): AsyncResult<[V1, V2, V3, V4], ConcurrentError>;
   <V1, V2, V3, V4, V5>(
     values: readonly [
       AsyncResult<V1>,
@@ -148,7 +150,7 @@ type Join = {
       AsyncResult<V4>,
       AsyncResult<V5>,
     ],
-  ): AsyncResult<[V1, V2, V3, V4, V5], AggregateError>;
+  ): AsyncResult<[V1, V2, V3, V4, V5], ConcurrentError>;
   <V1, V2, V3, V4, V5, V6>(
     values: readonly [
       AsyncResult<V1>,
@@ -158,7 +160,7 @@ type Join = {
       AsyncResult<V5>,
       AsyncResult<V6>,
     ],
-  ): AsyncResult<[V1, V2, V3, V4, V5, V6], AggregateError>;
+  ): AsyncResult<[V1, V2, V3, V4, V5, V6], ConcurrentError>;
   <V1, V2, V3, V4, V5, V6, V7>(
     values: readonly [
       AsyncResult<V1>,
@@ -169,7 +171,7 @@ type Join = {
       AsyncResult<V6>,
       AsyncResult<V7>,
     ],
-  ): AsyncResult<[V1, V2, V3, V4, V5, V6, V7], AggregateError>;
+  ): AsyncResult<[V1, V2, V3, V4, V5, V6, V7], ConcurrentError>;
   <V1, V2, V3, V4, V5, V6, V7, V8>(
     values: readonly [
       AsyncResult<V1>,
@@ -181,7 +183,7 @@ type Join = {
       AsyncResult<V7>,
       AsyncResult<V8>,
     ],
-  ): AsyncResult<[V1, V2, V3, V4, V5, V6, V7, V8], AggregateError>;
+  ): AsyncResult<[V1, V2, V3, V4, V5, V6, V7, V8], ConcurrentError>;
   <V1, V2, V3, V4, V5, V6, V7, V8, V9>(
     values: readonly [
       AsyncResult<V1>,
@@ -194,7 +196,7 @@ type Join = {
       AsyncResult<V8>,
       AsyncResult<V9>,
     ],
-  ): AsyncResult<[V1, V2, V3, V4, V5, V6, V7, V8, V9], AggregateError>;
+  ): AsyncResult<[V1, V2, V3, V4, V5, V6, V7, V8, V9], ConcurrentError>;
   <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10>(
     values: readonly [
       AsyncResult<V1>,
@@ -208,7 +210,7 @@ type Join = {
       AsyncResult<V9>,
       AsyncResult<V10>,
     ],
-  ): AsyncResult<[V1, V2, V3, V4, V5, V6, V7, V8, V9, V10], AggregateError>;
+  ): AsyncResult<[V1, V2, V3, V4, V5, V6, V7, V8, V9, V10], ConcurrentError>;
   <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11>(
     values: readonly [
       AsyncResult<V1>,
@@ -225,7 +227,7 @@ type Join = {
     ],
   ): AsyncResult<
     [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11],
-    AggregateError
+    ConcurrentError
   >;
   <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12>(
     values: readonly [
@@ -244,7 +246,7 @@ type Join = {
     ],
   ): AsyncResult<
     [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12],
-    AggregateError
+    ConcurrentError
   >;
   <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13>(
     values: readonly [
@@ -264,7 +266,7 @@ type Join = {
     ],
   ): AsyncResult<
     [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13],
-    AggregateError
+    ConcurrentError
   >;
   <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14>(
     values: readonly [
@@ -285,7 +287,7 @@ type Join = {
     ],
   ): AsyncResult<
     [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14],
-    AggregateError
+    ConcurrentError
   >;
   <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15>(
     values: readonly [
@@ -307,7 +309,7 @@ type Join = {
     ],
   ): AsyncResult<
     [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15],
-    AggregateError
+    ConcurrentError
   >;
   <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16>(
     values: readonly [
@@ -330,7 +332,7 @@ type Join = {
     ],
   ): AsyncResult<
     [V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16],
-    AggregateError
+    ConcurrentError
   >;
   <V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17>(
     values: readonly [
@@ -372,7 +374,7 @@ type Join = {
       V16,
       V17,
     ],
-    AggregateError
+    ConcurrentError
   >;
   <
     V1,
@@ -435,7 +437,7 @@ type Join = {
       V17,
       V18,
     ],
-    AggregateError
+    ConcurrentError
   >;
   <
     V1,
@@ -501,7 +503,7 @@ type Join = {
       V18,
       V19,
     ],
-    AggregateError
+    ConcurrentError
   >;
   <
     V1,
@@ -570,9 +572,9 @@ type Join = {
       V19,
       V20,
     ],
-    AggregateError
+    ConcurrentError
   >;
-  <V>(values: readonly AsyncResult<V>[]): AsyncResult<V[], AggregateError>;
+  <V>(values: readonly AsyncResult<V>[]): AsyncResult<V[], ConcurrentError>;
 };
 export const join = ((results: readonly AsyncResult<unknown>[]) => {
   const pending = results.filter(AsyncResult.is.pending);
@@ -583,7 +585,9 @@ export const join = ((results: readonly AsyncResult<unknown>[]) => {
   }
   if (rejected.length > 0) {
     return AsyncResult.of.rejected(
-      new AggregateError(rejected.map(AsyncResult.to.rejectedError) as Error[]),
+      new ConcurrentError(
+        rejected.map(AsyncResult.to.rejectedError) as Error[],
+      ),
     );
   }
   return AsyncResult.of.resolved(resolved.map(AsyncResult.to.resolvedValue));

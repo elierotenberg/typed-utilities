@@ -16,23 +16,23 @@ export const defer = <T>(): Deferred<T> => {
     innerReject = reject;
   });
 
-  const resolve: Deferred<T>["resolve"] = (value) => {
+  const resolve: Deferred<T>[`resolve`] = (value) => {
     if (!AsyncResult.is.pending(state)) {
-      throw new Error("Deferred already settled");
+      throw new Error(`Deferred already settled`);
     }
     if (!innerResolve) {
-      throw new Error("innerResolve is not defined");
+      throw new Error(`innerResolve is not defined`);
     }
     state = AsyncResult.of.resolved(value);
     innerResolve(value);
   };
 
-  const reject: Deferred<T>["reject"] = (error) => {
+  const reject: Deferred<T>[`reject`] = (error) => {
     if (!AsyncResult.is.pending(state)) {
-      throw new Error("Deferred already settled");
+      throw new Error(`Deferred already settled`);
     }
     if (!innerReject) {
-      throw new Error("innerResolve is not defined");
+      throw new Error(`innerResolve is not defined`);
     }
     state = AsyncResult.of.rejected(error);
     innerReject(error);

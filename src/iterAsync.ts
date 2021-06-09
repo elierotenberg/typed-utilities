@@ -1,3 +1,5 @@
+import { ConcurrentError } from "./ConcurrentError";
+
 import { id } from ".";
 
 export type MapAsync = <I, T>(
@@ -19,7 +21,7 @@ export const mapAsyncSerial: MapAsync = async <I, T>(
     }
   }
   if (errors.length > 0) {
-    throw new AggregateError(errors);
+    throw new ConcurrentError(errors);
   }
   return values;
 };
@@ -32,14 +34,14 @@ export const mapAsyncConcurrent: MapAsync = async <I, T>(
   const errors: Error[] = [];
   const results = await Promise.allSettled(items.map(fn));
   for (const result of results) {
-    if (result.status === "fulfilled") {
+    if (result.status === `fulfilled`) {
       values.push(result.value);
     } else {
       errors.push(result.reason);
     }
   }
   if (errors.length > 0) {
-    throw new AggregateError(errors);
+    throw new ConcurrentError(errors);
   }
   return values;
 };

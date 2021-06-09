@@ -1,10 +1,10 @@
 import { Result, sleep } from "..";
 
-describe("Result", () => {
-  test("Sync", () => {
+describe(`Result`, () => {
+  test(`Sync`, () => {
     const divide = (a: number, b: number): number => {
       if (b === 0) {
-        throw new Error("division by zero");
+        throw new Error(`division by zero`);
       }
       return a / b;
     };
@@ -21,7 +21,7 @@ describe("Result", () => {
     for (const m of t1) {
       expect(Result.is.ok(m)).toEqual(true);
     }
-    const isNotOdd = new Error("not odd");
+    const isNotOdd = new Error(`not odd`);
 
     const keepOdd = (v: number): Result.Result<number> =>
       v % 2 === 1 ? Result.of.ok(v) : Result.of.err(isNotOdd);
@@ -37,11 +37,11 @@ describe("Result", () => {
     expect(t2.filter(Result.is.ok).map(Result.to.okValue)).toEqual([1, 3]);
   });
 
-  test("Async", async () => {
+  test(`Async`, async () => {
     const divide = async (a: number, b: number): Promise<number> => {
       await sleep(1);
       if (b === 0) {
-        throw new Error("division by zero");
+        throw new Error(`division by zero`);
       }
       return a / b;
     };
@@ -58,7 +58,7 @@ describe("Result", () => {
     for (const m of t1) {
       expect(Result.is.ok(m)).toEqual(true);
     }
-    const isNotOdd = new Error("not odd");
+    const isNotOdd = new Error(`not odd`);
 
     const keepOdd = (v: number): Result.Result<number> =>
       v % 2 === 1 ? Result.of.ok(v) : Result.of.err(isNotOdd);

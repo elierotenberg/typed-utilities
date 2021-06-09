@@ -1,7 +1,7 @@
 import { AsyncResult, Deferred } from "..";
 import { sleep } from "../sleep";
 
-test("Deferred", async () => {
+test(`Deferred`, async () => {
   const deferredNull = Deferred.defer();
   expect(AsyncResult.is.pending(deferredNull.state())).toEqual(true);
 

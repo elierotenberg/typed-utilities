@@ -1,8 +1,8 @@
-import { AsyncResult, range } from "..";
+import { AsyncResult, range, ConcurrentError } from "..";
 
-describe("AsyncResult", () => {
-  test("basic", async () => {
-    const testError = new Error("test error");
+describe(`AsyncResult`, () => {
+  test(`basic`, async () => {
+    const testError = new Error(`test error`);
     const pending = AsyncResult.of.pending();
     const rejected = AsyncResult.of.rejected(testError);
     const resolved = AsyncResult.of.resolved(null);
@@ -31,26 +31,26 @@ describe("AsyncResult", () => {
     expect(AsyncResult.to.resolvedValue(resolved)).toEqual(null);
 
     const match = {
-      pending: () => "pending",
+      pending: () => `pending`,
       rejected: (error: Error) => `error: ${error.message}`,
       resolved: (value: null) => `value: ${value}`,
     };
 
-    expect(AsyncResult.match(pending, match)).toEqual("pending");
-    expect(AsyncResult.match(rejected, match)).toEqual("error: test error");
-    expect(AsyncResult.match(resolved, match)).toEqual("value: null");
+    expect(AsyncResult.match(pending, match)).toEqual(`pending`);
+    expect(AsyncResult.match(rejected, match)).toEqual(`error: test error`);
+    expect(AsyncResult.match(resolved, match)).toEqual(`value: null`);
   });
 
-  test("join", () => {
-    const error1 = new SyntaxError("error1");
-    const error2 = new TypeError("error2");
+  test(`join`, () => {
+    const error1 = new SyntaxError(`error1`);
+    const error2 = new TypeError(`error2`);
 
     expect(AsyncResult.join([])).toEqual(AsyncResult.of.resolved([]));
     expect(AsyncResult.join([AsyncResult.of.pending()])).toEqual(
       AsyncResult.of.pending(),
     );
     expect(AsyncResult.join([AsyncResult.of.rejected(error1)])).toEqual(
-      AsyncResult.of.rejected(new AggregateError([error1])),
+      AsyncResult.of.rejected(new ConcurrentError([error1])),
     );
     expect(AsyncResult.join([AsyncResult.of.resolved(null)])).toEqual(
       AsyncResult.of.resolved([null]),
@@ -63,7 +63,7 @@ describe("AsyncResult", () => {
     ] as const;
     const j1: AsyncResult.AsyncResult<
       [never, never, null],
-      AggregateError
+      ConcurrentError
     > = AsyncResult.join(t1);
     expect(j1).toEqual(AsyncResult.of.pending());
 
@@ -75,7 +75,7 @@ describe("AsyncResult", () => {
       [never, null],
       SyntaxError
     > = AsyncResult.join(t2);
-    expect(j2).toEqual(AsyncResult.of.rejected(new AggregateError([error1])));
+    expect(j2).toEqual(AsyncResult.of.rejected(new ConcurrentError([error1])));
 
     const t3 = [
       AsyncResult.of.resolved(null),
@@ -84,22 +84,22 @@ describe("AsyncResult", () => {
     ] as const;
     const j3: AsyncResult.AsyncResult<
       [null, never, never],
-      AggregateError
+      ConcurrentError
     > = AsyncResult.join(t3);
     expect(j3).toEqual(
-      AsyncResult.of.rejected(new AggregateError([error1, error2])),
+      AsyncResult.of.rejected(new ConcurrentError([error1, error2])),
     );
 
     const t4 = [
       AsyncResult.of.resolved(null),
       AsyncResult.of.resolved(0 as const),
-      AsyncResult.of.resolved(["a"] as const),
+      AsyncResult.of.resolved([`a`] as const),
     ] as const;
     const j4: AsyncResult.AsyncResult<
-      [null, 0, readonly ["a"]],
-      AggregateError
+      [null, 0, readonly [`a`]],
+      ConcurrentError
     > = AsyncResult.join(t4);
-    expect(j4).toEqual(AsyncResult.of.resolved([null, 0, ["a"]]));
+    expect(j4).toEqual(AsyncResult.of.resolved([null, 0, [`a`]]));
 
     const t5 = range(10).map((k) => AsyncResult.of.resolved(k));
     expect(AsyncResult.join(t5)).toEqual(AsyncResult.of.resolved(range(10)));

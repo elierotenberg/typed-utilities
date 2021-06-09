@@ -1,6 +1,6 @@
 enum EitherTag {
-  Left = "left",
-  Right = "right",
+  Left = `left`,
+  Right = `right`,
 }
 
 export type Left<T> = [tag: EitherTag.Left, value: T];
@@ -16,7 +16,7 @@ function assertLeft<L>(
   message?: string,
 ): asserts either is Left<L> {
   if (!isLeft(either)) {
-    throw new TypeError(message ?? "either should be 'left'");
+    throw new TypeError(message ?? `either should be 'left'`);
   }
 }
 
@@ -29,7 +29,7 @@ function assertRight<R>(
   message?: string,
 ): asserts either is Right<R> {
   if (!isRight(either)) {
-    throw new TypeError(message ?? "either should be 'right'");
+    throw new TypeError(message ?? `either should be 'right'`);
   }
 }
 

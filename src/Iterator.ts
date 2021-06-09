@@ -1,12 +1,15 @@
 export const next = <T>(iter: Iterator<T>): T => {
   const { value, done } = iter.next();
   if (done) {
-    throw new Error("Iterable is done");
+    throw new Error(`Iterable is done`);
   }
   return value;
 };
 
-export const nextify = <T>(iter: Iterator<T>): (() => T) => () => next(iter);
+export const nextify =
+  <T>(iter: Iterator<T>): (() => T) =>
+  () =>
+    next(iter);
 
 export const runToCompletion = <T>(iter: Iterator<T>): Promise<T> =>
   new Promise((resolve, reject) => {
@@ -23,6 +26,7 @@ export const runToCompletion = <T>(iter: Iterator<T>): Promise<T> =>
     }
   });
 
-export const withRunToCompletion = <T>(
-  fn: () => Iterator<T>,
-): (() => Promise<T>) => async () => await runToCompletion(fn());
+export const withRunToCompletion =
+  <T>(fn: () => Iterator<T>): (() => Promise<T>) =>
+  async () =>
+    await runToCompletion(fn());

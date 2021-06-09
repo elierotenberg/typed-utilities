@@ -1,6 +1,6 @@
 import { Option } from "..";
 
-test("Option", () => {
+test(`Option`, () => {
   expect(Option.is.some(Option.of.some(1))).toEqual(true);
   expect(Option.is.none(Option.of.some(1))).toEqual(false);
   expect(() => Option.assert.some(Option.of.some(1))).not.toThrow();

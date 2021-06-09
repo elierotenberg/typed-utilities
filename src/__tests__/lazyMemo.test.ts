@@ -1,6 +1,6 @@
 import { lazyMemo } from "..";
 
-test("lazyMemo", () => {
+test(`lazyMemo`, () => {
   let count = 0;
   const m = lazyMemo(() => {
     return ++count;

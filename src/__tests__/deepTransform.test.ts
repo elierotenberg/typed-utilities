@@ -2,15 +2,15 @@ import { dotCase, pathCase } from "change-case";
 
 import { deepTransform } from "..";
 
-describe("deepTransform", () => {
-  test("transform basic types", () => {
+describe(`deepTransform`, () => {
+  test(`transform basic types`, () => {
     const input = {
       a: 1,
-      b: "b",
+      b: `b`,
       c: null,
-      d: [0, "dd", undefined],
+      d: [0, `dd`, undefined],
       e: {
-        f: "f",
+        f: `f`,
         g: 2,
       },
       h: new Date(0),
@@ -19,14 +19,14 @@ describe("deepTransform", () => {
     const transform = {
       key: (key: string) => key.toUpperCase(),
       value: (value: unknown): unknown => {
-        if (typeof value === "number") {
+        if (typeof value === `number`) {
           return value + 1;
         }
-        if (typeof value === "string") {
+        if (typeof value === `string`) {
           return `${value} + ${value}`;
         }
         if (value === null) {
-          return [3, "null"];
+          return [3, `null`];
         }
         if (value instanceof Date) {
           return new Date(value.getTime() + 1000);
@@ -39,21 +39,21 @@ describe("deepTransform", () => {
 
     expect(output).toEqual({
       A: 2,
-      B: "b + b",
-      C: [3, "null"],
-      D: [1, "dd + dd", undefined],
-      E: { F: "f + f", G: 3 },
+      B: `b + b`,
+      C: [3, `null`],
+      D: [1, `dd + dd`, undefined],
+      E: { F: `f + f`, G: 3 },
       H: new Date(1000),
     });
   });
 
-  test("throw on circular object", () => {
+  test(`throw on circular object`, () => {
     const input1: Record<string, unknown> = {
       a: 1,
     };
     input1.b = input1;
     expect(() => deepTransform(input1, {}, [])).toThrowError(
-      "circular reference",
+      `circular reference`,
     );
 
     const input2: Record<string, unknown> = {
@@ -61,15 +61,15 @@ describe("deepTransform", () => {
     };
     input2.d = [4, input2];
     expect(() => deepTransform(input2, {}, [])).toThrowError(
-      "circular reference",
+      `circular reference`,
     );
   });
 
-  test("transform custom class", () => {
+  test(`transform custom class`, () => {
     const now = new Date();
     class Skipped {
-      v1 = "v1";
-      v2 = "v2";
+      v1 = `v1`;
+      v2 = `v2`;
       v3;
       constructor(v3: string) {
         this.v3 = v3;
@@ -79,10 +79,10 @@ describe("deepTransform", () => {
     const transform = {
       key: (key: string) => key.toUpperCase(),
       value: (value: unknown) => {
-        if (typeof value === "number") {
+        if (typeof value === `number`) {
           return value + 1;
         }
-        if (typeof value === "string") {
+        if (typeof value === `string`) {
           return `${value} + ${value}`;
         }
         if (value instanceof Date) {
@@ -97,43 +97,43 @@ describe("deepTransform", () => {
     const input1 = {
       a: 1,
       b: { c: undefined, d: now },
-      e: "v4",
-      s: new Skipped("v3"),
+      e: `v4`,
+      s: new Skipped(`v3`),
     };
 
     const output1 = deepTransform(input1, transform, [Date, Skipped]);
     expect(output1).toEqual({
       A: 2,
       B: { C: undefined, D: new Date(now.getTime() + 1000) },
-      E: "v4 + v4",
-      S: { v1: "v1", v2: "v2", v3: "V3" },
+      E: `v4 + v4`,
+      S: { v1: `v1`, v2: `v2`, v3: `V3` },
     });
     expect((output1 as Record<string, unknown>).S).toBeInstanceOf(Skipped);
     const output2 = deepTransform(input1, transform, [Date]);
     expect(output2).toEqual({
       A: 2,
       B: { C: undefined, D: new Date(now.getTime() + 1000) },
-      E: "v4 + v4",
-      S: { V1: "v1 + v1", V2: "v2 + v2", V3: "V3 + V3" },
+      E: `v4 + v4`,
+      S: { V1: `v1 + v1`, V2: `v2 + v2`, V3: `V3 + V3` },
     });
     expect((output2 as Record<string, unknown>).S).toBeInstanceOf(Skipped);
   });
 
-  test("encode / decode undefined", () => {
+  test(`encode / decode undefined`, () => {
     const input = {
-      a: "a",
-      b: "b",
+      a: `a`,
+      b: `b`,
       c: undefined,
     };
 
     const encodeUndefinedAsString = {
       value: (value: unknown) =>
-        typeof value === "undefined" ? "__undefined__" : value,
+        typeof value === `undefined` ? `__undefined__` : value,
     };
 
     const decodeUndefinedAsString = {
       value: (value: unknown) =>
-        value === "__undefined__" ? undefined : value,
+        value === `__undefined__` ? undefined : value,
     };
 
     expect(
@@ -144,11 +144,11 @@ describe("deepTransform", () => {
       ),
     ).toEqual(input);
 
-    const $undefined = Symbol("undefined");
+    const $undefined = Symbol(`undefined`);
 
     const encodeUndefinedAsSymbol = {
       value: (value: unknown) =>
-        typeof value === "undefined" ? $undefined : value,
+        typeof value === `undefined` ? $undefined : value,
     };
 
     const decodeUndefinedAsSymbol = {
@@ -162,21 +162,21 @@ describe("deepTransform", () => {
     ).toEqual(input);
   });
 
-  test("change cases", () => {
+  test(`change cases`, () => {
     const input = {
-      camelCaseKey: "kebab-case-value",
-      snake_case_key: "PascalCaseValue",
-      ["Train-Case-Key"]: 0,
+      camelCaseKey: `kebab-case-value`,
+      snake_case_key: `PascalCaseValue`,
+      [`Train-Case-Key`]: 0,
     };
     expect(
       deepTransform(input, {
         key: dotCase,
         value: (value: unknown) =>
-          typeof value === "string" ? pathCase(value) : value,
+          typeof value === `string` ? pathCase(value) : value,
       }),
     ).toEqual({
-      "camel.case.key": "kebab/case/value",
-      "snake.case.key": "pascal/case/value",
+      "camel.case.key": `kebab/case/value`,
+      "snake.case.key": `pascal/case/value`,
       "train.case.key": 0,
     });
   });

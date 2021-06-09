@@ -16,7 +16,7 @@ function assertOk<Value = unknown>(
   message?: string,
 ): asserts result is Ok<Value> {
   if (!isOk(result)) {
-    throw new TypeError(message ?? "result should be 'ok'");
+    throw new TypeError(message ?? `result should be 'ok'`);
   }
 }
 
@@ -31,7 +31,7 @@ function assertErr<Error = unknown>(
   message?: string,
 ): asserts result is Err<Error> {
   if (!isErr(result)) {
-    throw new TypeError(message ?? "result should be 'err'");
+    throw new TypeError(message ?? `result should be 'err'`);
   }
 }
 

@@ -1,6 +1,6 @@
 module.exports = {
-  testEnvironment: "node",
+  testEnvironment: `node`,
   maxConcurrency: 50,
-  moduleFileExtensions: ["js"],
-  roots: ["build"],
+  moduleFileExtensions: [`js`],
+  roots: [`build`],
 };

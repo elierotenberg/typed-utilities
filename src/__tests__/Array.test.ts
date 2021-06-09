@@ -9,9 +9,9 @@ import {
   exactlyOneOrNone,
 } from "..";
 
-describe("Array", () => {
-  describe("containEqualItems", () => {
-    test("numbers", () => {
+describe(`Array`, () => {
+  describe(`containEqualItems`, () => {
+    test(`numbers`, () => {
       const t1 = [1, 2, 3];
       const t2 = [2, 3, 1];
       const t3 = [1, 2, 4, 3];
@@ -24,10 +24,10 @@ describe("Array", () => {
       expect(containEqualItems(t1, t3, equalMod4)).toEqual(false);
     });
 
-    test("objects", () => {
-      const t1 = [{ key1: "value1" }, { key2: "value2" }];
-      const t2 = [{ key2: "value2" }, { key1: "value1" }];
-      const t3 = [{ key1: "value3" }, { key2: "value4" }];
+    test(`objects`, () => {
+      const t1 = [{ key1: `value1` }, { key2: `value2` }];
+      const t2 = [{ key2: `value2` }, { key1: `value1` }];
+      const t3 = [{ key1: `value3` }, { key2: `value4` }];
       expect(containEqualItems(t1, t2)).toEqual(false);
       expect(containEqualItems(t1, t2, deepEqual)).toEqual(true);
       expect(containEqualItems(t1, t3, deepEqual)).toEqual(false);
@@ -58,28 +58,28 @@ describe("Array", () => {
     });
   });
 
-  describe("deduplicate", () => {
-    test("numbers", () => {
+  describe(`deduplicate`, () => {
+    test(`numbers`, () => {
       const t = [1, 3, 1, 1, 3, 2];
       expect(deduplicate(t)).toEqual([1, 3, 2]);
       expect(deduplicate(t, (a, b) => a % 2 === b % 2)).toEqual([1, 2]);
     });
 
-    test("objects", () => {
+    test(`objects`, () => {
       const t1 = [
-        { key1: "value1" },
-        { key1: "value2" },
-        { key2: "value1" },
-        { key1: "value1" },
-        { key2: "value2" },
-        { key1: "value1" },
+        { key1: `value1` },
+        { key1: `value2` },
+        { key2: `value1` },
+        { key1: `value1` },
+        { key2: `value2` },
+        { key1: `value1` },
       ];
       expect(deduplicate(t1)).toEqual(t1);
       expect(deduplicate(t1, deepEqual)).toEqual([
-        { key1: "value1" },
-        { key1: "value2" },
-        { key2: "value1" },
-        { key2: "value2" },
+        { key1: `value1` },
+        { key1: `value2` },
+        { key2: `value1` },
+        { key2: `value2` },
       ]);
       const t2 = [{ v: 0 }, { v: 1 }, { v: 0 }, { v: 1 }];
       expect(deduplicate(t2)).toEqual(t2);
@@ -110,8 +110,8 @@ describe("Array", () => {
     });
   });
 
-  describe("intersection", () => {
-    test("numbers", () => {
+  describe(`intersection`, () => {
+    test(`numbers`, () => {
       const t1 = [1, 3, 1, 2, 1];
       const t2 = [2, 1, 1, 1, 2];
       const t3 = [2];
@@ -120,7 +120,7 @@ describe("Array", () => {
       expect(intersection([t1, t2, t3])).toEqual([2]);
     });
 
-    test("objects", () => {
+    test(`objects`, () => {
       const t1 = [{ v: 1 }, { v: 3 }, { v: 1 }, { v: 2 }, { v: 1 }, { u: 3 }];
       const t2 = [{ v: 2 }, { v: 1 }, { v: 1 }, { v: 1 }, { u: 3 }];
       const t3 = [{ v: 2 }, { u: 4 }];
@@ -134,19 +134,19 @@ describe("Array", () => {
       expect(intersection([t1, t2, t3], deepEqual)).toEqual([{ v: 2 }]);
     });
 
-    test("exactlyNone", () => {
+    test(`exactlyNone`, () => {
       expect(exactlyNone([])).toEqual(null);
       expect(() => exactlyNone([1])).toThrow();
       expect(() => exactlyNone([1, 2])).toThrow();
     });
 
-    test("exactlyOne", () => {
+    test(`exactlyOne`, () => {
       expect(() => exactlyOne([])).toThrow();
       expect(exactlyOne([1])).toEqual(1);
       expect(() => exactlyOne([1, 2])).toThrow();
     });
 
-    test("exactlyOneOrNone", () => {
+    test(`exactlyOneOrNone`, () => {
       expect(exactlyOneOrNone([])).toEqual(null);
       expect(exactlyOneOrNone([1])).toEqual(1);
       expect(() => exactlyOneOrNone([1, 2])).toThrow();

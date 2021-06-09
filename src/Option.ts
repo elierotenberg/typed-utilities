@@ -14,7 +14,7 @@ function assertSome<T>(
   message?: string,
 ): asserts option is Some<T> {
   if (!isSome(option)) {
-    throw new TypeError(message ?? "option should be 'some'");
+    throw new TypeError(message ?? `option should be 'some'`);
   }
 }
 
@@ -27,7 +27,7 @@ function assertNone(
   message?: string,
 ): asserts option is None {
   if (!isNone(option)) {
-    throw new TypeError(message ?? "option should be 'none'");
+    throw new TypeError(message ?? `option should be 'none'`);
   }
 }
 const toSomeValue = <T>(option: Some<T>): T => option[1];
