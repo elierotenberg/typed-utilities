@@ -275,7 +275,7 @@ type ResolveAll = {
     T15,
     T16,
     T17,
-    T18
+    T18,
   >(
     values: readonly [
       Promise<T1>,
@@ -338,7 +338,7 @@ type ResolveAll = {
     T16,
     T17,
     T18,
-    T19
+    T19,
   >(
     values: readonly [
       Promise<T1>,
@@ -404,7 +404,7 @@ type ResolveAll = {
     T17,
     T18,
     T19,
-    T20
+    T20,
   >(
     values: readonly [
       Promise<T1>,
@@ -453,8 +453,8 @@ type ResolveAll = {
     ]
   >;
 };
-export const resolveAllSerial = (((values: readonly Promise<unknown>[]) =>
-  mapAsyncSerial(values, id)) as unknown) as ResolveAll;
+export const resolveAllSerial = ((values: readonly Promise<unknown>[]) =>
+  mapAsyncSerial(values, id)) as unknown as ResolveAll;
 
-export const resolveAllConcurrent = (((values: readonly Promise<unknown>[]) =>
-  mapAsyncConcurrent(values, id)) as unknown) as ResolveAll;
+export const resolveAllConcurrent = ((values: readonly Promise<unknown>[]) =>
+  mapAsyncConcurrent(values, id)) as unknown as ResolveAll;

@@ -61,20 +61,16 @@ describe(`AsyncResult`, () => {
       AsyncResult.of.rejected(error1),
       AsyncResult.of.resolved(null),
     ] as const;
-    const j1: AsyncResult.AsyncResult<
-      [never, never, null],
-      ConcurrentError
-    > = AsyncResult.join(t1);
+    const j1: AsyncResult.AsyncResult<[never, never, null], ConcurrentError> =
+      AsyncResult.join(t1);
     expect(j1).toEqual(AsyncResult.of.pending());
 
     const t2 = [
       AsyncResult.of.rejected(error1),
       AsyncResult.of.resolved(null),
     ] as const;
-    const j2: AsyncResult.AsyncResult<
-      [never, null],
-      SyntaxError
-    > = AsyncResult.join(t2);
+    const j2: AsyncResult.AsyncResult<[never, null], SyntaxError> =
+      AsyncResult.join(t2);
     expect(j2).toEqual(AsyncResult.of.rejected(new ConcurrentError([error1])));
 
     const t3 = [
@@ -82,10 +78,8 @@ describe(`AsyncResult`, () => {
       AsyncResult.of.rejected(error1),
       AsyncResult.of.rejected(error2),
     ] as const;
-    const j3: AsyncResult.AsyncResult<
-      [null, never, never],
-      ConcurrentError
-    > = AsyncResult.join(t3);
+    const j3: AsyncResult.AsyncResult<[null, never, never], ConcurrentError> =
+      AsyncResult.join(t3);
     expect(j3).toEqual(
       AsyncResult.of.rejected(new ConcurrentError([error1, error2])),
     );
@@ -103,5 +97,27 @@ describe(`AsyncResult`, () => {
 
     const t5 = range(10).map((k) => AsyncResult.of.resolved(k));
     expect(AsyncResult.join(t5)).toEqual(AsyncResult.of.resolved(range(10)));
+  });
+
+  test(`pipe`, () => {
+    expect(AsyncResult.pipe(AsyncResult.of.pending(), () => 42)).toEqual(
+      AsyncResult.of.pending(),
+    );
+    const error1 = new Error(`error 1`);
+    expect(AsyncResult.pipe(AsyncResult.of.rejected(error1), () => 42)).toEqual(
+      AsyncResult.of.rejected(error1),
+    );
+    expect(AsyncResult.pipe(AsyncResult.of.resolved(21), (x) => 2 * x)).toEqual(
+      AsyncResult.of.resolved(42),
+    );
+    const error2 = new Error(`error 2`);
+    expect(
+      AsyncResult.pipe(AsyncResult.of.resolved(21), (x) => {
+        if (x === 21) {
+          throw error2;
+        }
+        return 2 * x;
+      }),
+    ).toEqual(AsyncResult.of.rejected(error2));
   });
 });

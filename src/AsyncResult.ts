@@ -102,7 +102,7 @@ type Match<
   IfRejected,
   IfResolved,
   Value = unknown,
-  Error = unknown
+  Error = unknown,
 > = {
   readonly pending: () => IfPending;
   readonly rejected: (error: Error) => IfRejected;
@@ -114,7 +114,7 @@ export const match = <
   IfRejected,
   IfResolved,
   Value = unknown,
-  Error = unknown
+  Error = unknown,
 >(
   result: AsyncResult<Value, Error>,
   match: Match<IfPending, IfRejected, IfResolved, Value, Error>,
@@ -394,7 +394,7 @@ type Join = {
     V15,
     V16,
     V17,
-    V18
+    V18,
   >(
     values: readonly [
       AsyncResult<V1>,
@@ -458,7 +458,7 @@ type Join = {
     V16,
     V17,
     V18,
-    V19
+    V19,
   >(
     values: readonly [
       AsyncResult<V1>,
@@ -525,7 +525,7 @@ type Join = {
     V17,
     V18,
     V19,
-    V20
+    V20,
   >(
     values: readonly [
       AsyncResult<V1>,
@@ -592,3 +592,19 @@ export const join = ((results: readonly AsyncResult<unknown>[]) => {
   }
   return AsyncResult.of.resolved(resolved.map(AsyncResult.to.resolvedValue));
 }) as Join;
+
+export const pipe = <T, U>(
+  result: AsyncResult<T>,
+  fn: (value: T) => U,
+): AsyncResult<U> =>
+  AsyncResult.match(result, {
+    pending: AsyncResult.of.pending,
+    rejected: AsyncResult.of.rejected,
+    resolved: (value) => {
+      try {
+        return AsyncResult.of.resolved(fn(value));
+      } catch (error) {
+        return AsyncResult.of.rejected(error);
+      }
+    },
+  });
