@@ -73,5 +73,19 @@ describe(`MapAsync`, () => {
     ] as const;
     expect(await resolveAllSerial(items)).toEqual([1, null, 3]);
     expect(await resolveAllConcurrent(items)).toEqual([1, null, 3]);
+    const dynamicItems: readonly Promise<null | number | string>[] = [
+      Promise.resolve(null),
+      Promise.resolve(null),
+      Promise.resolve(1),
+      Promise.resolve(null),
+      Promise.resolve(`hello`),
+    ] as const;
+    expect(await resolveAllConcurrent(dynamicItems)).toEqual([
+      null,
+      null,
+      1,
+      null,
+      `hello`,
+    ]);
   });
 });

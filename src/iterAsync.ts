@@ -452,6 +452,7 @@ type ResolveAll = {
       T20,
     ]
   >;
+  <T>(values: readonly Promise<T>[]): Promise<T[]>;
 };
 export const resolveAllSerial = ((values: readonly Promise<unknown>[]) =>
   mapAsyncSerial(values, id)) as unknown as ResolveAll;
