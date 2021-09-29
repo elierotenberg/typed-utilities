@@ -1,10 +1,12 @@
 {
   "name": "typed-utilities",
-  "version": "1.15.0",
+  "version": "1.15.1",
   "description": "Strongly typed general purpose utilities",
   "main": "build/index.js",
   "scripts": {
-    "build": "npm run check && npm run clean && babel src --out-dir build --extensions '.ts' --source-maps",
+    "build:js": "babel src --out-dir build --extensions '.ts' --source-maps",
+    "build:types": "tsc -p . --declaration --emitDeclarationOnly",
+    "build": "npm run check && npm run clean && npm run build:types && npm run build:js",
     "check:lint": "eslint src",
     "check:types": "tsc -p . --noEmit",
     "check": "npm run check:lint && npm run check:types",
