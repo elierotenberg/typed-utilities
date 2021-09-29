@@ -1,15 +1,16 @@
 {
   "name": "typed-utilities",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "description": "Strongly typed general purpose utilities",
   "main": "build/index.js",
   "scripts": {
-    "test": "jest",
-    "lint": "eslint src",
-    "clean:ts": "rm -rf build",
-    "build:ts": "npm run clean:ts && tsc -p .",
+    "build": "npm run check && npm run clean && babel src --out-dir build --extensions '.ts' --source-maps",
+    "check:lint": "eslint src",
+    "check:types": "tsc -p . --noEmit",
+    "check": "npm run check:lint && npm run check:types",
+    "clean": "rm -rf build",
     "codegen": "npm run build && node build/scripts/codegen.js",
-    "build": "npm run build:ts"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
   },
   "homepage": "https://github.com/elierotenberg/typed-utilities#readme",
   "devDependencies": {
+    "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
