@@ -1,4 +1,4 @@
-import { Deferred } from ".";
+import { Deferred } from "./Deferred";
 
 export class AsyncLock {
   private queue: Promise<void>;

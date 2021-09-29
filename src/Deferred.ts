@@ -1,16 +1,16 @@
-import { AsyncResult } from ".";
+import { AsyncResult } from "./AsyncResult";
 
 export type Deferred<T> = {
-  readonly state: () => AsyncResult.AsyncResult<T>;
+  readonly state: () => AsyncResult<T>;
   readonly resolve: (value: T) => void;
-  readonly reject: (error: Error) => void;
+  readonly reject: (error: unknown) => void;
   readonly await: () => Promise<T>;
 };
 
-export const defer = <T>(): Deferred<T> => {
-  let state: AsyncResult.AsyncResult<T> = AsyncResult.of.pending();
+const defer = <T>(): Deferred<T> => {
+  let state: AsyncResult<T> = AsyncResult.of.pending();
   let innerResolve: null | ((value: T) => void) = null;
-  let innerReject: null | ((error: Error) => void) = null;
+  let innerReject: null | ((error: unknown) => void) = null;
   const promise = new Promise<T>((resolve, reject) => {
     innerResolve = resolve;
     innerReject = reject;
@@ -44,4 +44,8 @@ export const defer = <T>(): Deferred<T> => {
     resolve,
     await: () => promise,
   };
+};
+
+export const Deferred = {
+  defer,
 };

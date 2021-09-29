@@ -20,7 +20,7 @@ test(`Either`, () => {
     expect(() => Either.assert.right(m)).toThrow();
   }
 
-  const keepOdd = (v: number): Either.Either<number, string> =>
+  const keepOdd = (v: number): Either<number, string> =>
     v % 2 === 1 ? Either.of.left(v) : Either.of.right(`not odd`);
 
   const t2 = t1.map((m) =>

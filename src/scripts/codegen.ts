@@ -7,7 +7,7 @@ const genAsyncResultJoinType = (k: number): string => {
       ? ``
       : `<${t.join(`, `)}>(values: readonly [${t
           .map((t) => `AsyncResult<${t}>`)
-          .join(`, `)}]): AsyncResult<[${t.join(`, `)}], ConcurrentError>;`
+          .join(`, `)}]): AsyncResult<[${t.join(`, `)}], AggregateError>;`
   }`;
 };
 
@@ -15,7 +15,7 @@ const genAsyncResultJoinTypes = (n: number): string =>
   [
     `type Join = {`,
     ...range(n + 1).map((k) => `  ${genAsyncResultJoinType(k)}`),
-    `<V>(values: readonly AsyncResult<V>[]): AsyncResult<V[], ConcurrentError>;`,
+    `<V>(values: readonly AsyncResult<V>[]): AsyncResult<V[], AggregateError>;`,
     `};`,
   ].join(`\n`);
 

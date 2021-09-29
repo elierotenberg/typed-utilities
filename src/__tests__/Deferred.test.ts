@@ -1,5 +1,4 @@
-import { AsyncResult, Deferred } from "..";
-import { sleep } from "../sleep";
+import { AsyncResult, Deferred, sleep } from "..";
 
 test(`Deferred`, async () => {
   const deferredNull = Deferred.defer();

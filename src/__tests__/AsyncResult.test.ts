@@ -1,4 +1,4 @@
-import { AsyncResult, range, ConcurrentError } from "..";
+import { AsyncResult, range } from "..";
 
 describe(`AsyncResult`, () => {
   test(`basic`, async () => {
@@ -50,7 +50,7 @@ describe(`AsyncResult`, () => {
       AsyncResult.of.pending(),
     );
     expect(AsyncResult.join([AsyncResult.of.rejected(error1)])).toEqual(
-      AsyncResult.of.rejected(new ConcurrentError([error1])),
+      AsyncResult.of.rejected(new AggregateError([error1])),
     );
     expect(AsyncResult.join([AsyncResult.of.resolved(null)])).toEqual(
       AsyncResult.of.resolved([null]),
@@ -61,7 +61,7 @@ describe(`AsyncResult`, () => {
       AsyncResult.of.rejected(error1),
       AsyncResult.of.resolved(null),
     ] as const;
-    const j1: AsyncResult.AsyncResult<[never, never, null], ConcurrentError> =
+    const j1: AsyncResult<[never, never, null], AggregateError> =
       AsyncResult.join(t1);
     expect(j1).toEqual(AsyncResult.of.pending());
 
@@ -69,19 +69,18 @@ describe(`AsyncResult`, () => {
       AsyncResult.of.rejected(error1),
       AsyncResult.of.resolved(null),
     ] as const;
-    const j2: AsyncResult.AsyncResult<[never, null], SyntaxError> =
-      AsyncResult.join(t2);
-    expect(j2).toEqual(AsyncResult.of.rejected(new ConcurrentError([error1])));
+    const j2: AsyncResult<[never, null], SyntaxError> = AsyncResult.join(t2);
+    expect(j2).toEqual(AsyncResult.of.rejected(new AggregateError([error1])));
 
     const t3 = [
       AsyncResult.of.resolved(null),
       AsyncResult.of.rejected(error1),
       AsyncResult.of.rejected(error2),
     ] as const;
-    const j3: AsyncResult.AsyncResult<[null, never, never], ConcurrentError> =
+    const j3: AsyncResult<[null, never, never], AggregateError> =
       AsyncResult.join(t3);
     expect(j3).toEqual(
-      AsyncResult.of.rejected(new ConcurrentError([error1, error2])),
+      AsyncResult.of.rejected(new AggregateError([error1, error2])),
     );
 
     const t4 = [
@@ -89,10 +88,8 @@ describe(`AsyncResult`, () => {
       AsyncResult.of.resolved(0 as const),
       AsyncResult.of.resolved([`a`] as const),
     ] as const;
-    const j4: AsyncResult.AsyncResult<
-      [null, 0, readonly [`a`]],
-      ConcurrentError
-    > = AsyncResult.join(t4);
+    const j4: AsyncResult<[null, 0, readonly [`a`]], AggregateError> =
+      AsyncResult.join(t4);
     expect(j4).toEqual(AsyncResult.of.resolved([null, 0, [`a`]]));
 
     const t5 = range(10).map((k) => AsyncResult.of.resolved(k));

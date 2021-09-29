@@ -1,4 +1,4 @@
-import { Result, sleep } from "..";
+import { Result, sleep, Err, Ok } from "..";
 
 describe(`Result`, () => {
   test(`Sync`, () => {
@@ -12,10 +12,10 @@ describe(`Result`, () => {
     const res2 = Result.tryCatch(() => divide(1, 0));
     expect(Result.is.ok(res1)).toEqual(true);
     expect(Result.is.err(res1)).toEqual(false);
-    expect(Result.to.okValue(res1 as Result.Ok<unknown>)).toEqual(0.1);
+    expect(Result.to.okValue(res1 as Ok<unknown>)).toEqual(0.1);
     expect(Result.is.ok(res2)).toEqual(false);
     expect(Result.is.err(res2)).toEqual(true);
-    expect(Result.to.errError(res2 as Result.Err)).toBeInstanceOf(Error);
+    expect(Result.to.errError(res2 as Err)).toBeInstanceOf(Error);
 
     const t1 = [1, 2, 3].map(Result.of.ok);
     for (const m of t1) {
@@ -23,7 +23,7 @@ describe(`Result`, () => {
     }
     const isNotOdd = new Error(`not odd`);
 
-    const keepOdd = (v: number): Result.Result<number> =>
+    const keepOdd = (v: number): Result<number> =>
       v % 2 === 1 ? Result.of.ok(v) : Result.of.err(isNotOdd);
 
     const t2 = t1.map((r) =>
@@ -49,10 +49,10 @@ describe(`Result`, () => {
     const res2 = await Result.tryCatchAsync(async () => await divide(1, 0));
     expect(Result.is.ok(res1)).toEqual(true);
     expect(Result.is.err(res1)).toEqual(false);
-    expect(Result.to.okValue(res1 as Result.Ok<unknown>)).toEqual(0.1);
+    expect(Result.to.okValue(res1 as Ok<unknown>)).toEqual(0.1);
     expect(Result.is.ok(res2)).toEqual(false);
     expect(Result.is.err(res2)).toEqual(true);
-    expect(Result.to.errError(res2 as Result.Err)).toBeInstanceOf(Error);
+    expect(Result.to.errError(res2 as Err)).toBeInstanceOf(Error);
 
     const t1 = [1, 2, 3].map(Result.of.ok);
     for (const m of t1) {
@@ -60,7 +60,7 @@ describe(`Result`, () => {
     }
     const isNotOdd = new Error(`not odd`);
 
-    const keepOdd = (v: number): Result.Result<number> =>
+    const keepOdd = (v: number): Result<number> =>
       v % 2 === 1 ? Result.of.ok(v) : Result.of.err(isNotOdd);
 
     const t2 = t1.map((r) =>

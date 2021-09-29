@@ -1,4 +1,4 @@
-import { Iterator } from "..";
+import { next, nextify, runToCompletion, withRunToCompletion } from "..";
 
 describe(`Iterator`, () => {
   test(`next`, () => {
@@ -8,10 +8,10 @@ describe(`Iterator`, () => {
       yield 3;
     }
     const iter = gen();
-    expect(Iterator.next(iter)).toEqual(1);
-    expect(Iterator.next(iter)).toEqual(2);
-    expect(Iterator.next(iter)).toEqual(3);
-    expect(() => Iterator.next(iter)).toThrow();
+    expect(next(iter)).toEqual(1);
+    expect(next(iter)).toEqual(2);
+    expect(next(iter)).toEqual(3);
+    expect(() => next(iter)).toThrow();
   });
 
   test(`nextify`, () => {
@@ -21,7 +21,7 @@ describe(`Iterator`, () => {
       yield 3;
     }
     const iter = gen();
-    const next = Iterator.nextify(iter);
+    const next = nextify(iter);
     expect(next()).toEqual(1);
     expect(next()).toEqual(2);
     expect(next()).toEqual(3);
@@ -35,7 +35,7 @@ describe(`Iterator`, () => {
       yield 3;
       return 4;
     }
-    const gen1Result = await Iterator.runToCompletion(gen1());
+    const gen1Result = await runToCompletion(gen1());
     expect(gen1Result).toEqual(4);
 
     function* gen2(): Iterator<number> {
@@ -44,12 +44,12 @@ describe(`Iterator`, () => {
       throw new Error();
     }
     await expect(
-      async () => await Iterator.runToCompletion(gen2()),
+      async () => await runToCompletion(gen2()),
     ).rejects.toBeTruthy();
   });
 
   test(`withRunToCompletion`, async () => {
-    const fn = Iterator.withRunToCompletion(function* () {
+    const fn = withRunToCompletion(function* () {
       yield 1;
       yield 2;
       yield 3;
@@ -61,7 +61,7 @@ describe(`Iterator`, () => {
 
   test(
     `unnested withRunToCompletion`,
-    Iterator.withRunToCompletion(function* () {
+    withRunToCompletion(function* () {
       yield 3;
       yield 4;
       yield expect(5).toEqual(5);

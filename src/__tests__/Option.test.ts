@@ -16,7 +16,7 @@ test(`Option`, () => {
     expect(Option.is.some(m));
   }
 
-  const keepOdd = (v: number): Option.Option<number> =>
+  const keepOdd = (v: number): Option<number> =>
     v % 2 === 1 ? Option.of.some(v) : Option.of.none();
 
   const t2 = t1.map((m) =>

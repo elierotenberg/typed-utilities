@@ -10,6 +10,8 @@ or
 
 ```yarn add typed-utilities```
 
+**IMPORTANT**: bring your own `AggregateError`, either natively or using a [global polyfill](https://github.com/zloirock/core-js#ecmascript-promise).
+
 
 ### Usage
 

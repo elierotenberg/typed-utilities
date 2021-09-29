@@ -4,7 +4,6 @@ import {
   sleep,
   resolveAllConcurrent,
   resolveAllSerial,
-  ConcurrentError,
 } from "..";
 
 describe(`MapAsync`, () => {
@@ -60,7 +59,7 @@ describe(`MapAsync`, () => {
     await expect(() => mapAsyncConcurrent(t, fn)).rejects.toBeTruthy();
     expect(countTrue).toEqual(3);
     await expect(() => mapAsyncConcurrent(t, fn)).rejects.toBeInstanceOf(
-      ConcurrentError,
+      AggregateError,
     );
     expect(countTrue).toEqual(6);
   });

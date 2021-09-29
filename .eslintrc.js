@@ -1,6 +1,11 @@
 module.exports = {
   root: true,
   parser: `@typescript-eslint/parser`,
+  plugins: [
+    `@typescript-eslint/eslint-plugin`,
+    `eslint-plugin-import`,
+    `eslint-plugin-prettier`,
+  ],
   extends: [
     `plugin:@typescript-eslint/recommended`,
     `prettier`,
@@ -20,19 +25,14 @@ module.exports = {
   },
   rules: {
     "prettier/prettier": [1, { trailingComma: `all`, endOfLine: `auto` }],
+    "object-shorthand": [1, `always`],
     quotes: [1, `backtick`],
     "@typescript-eslint/no-unused-vars": [1, { argsIgnorePattern: `^_` }],
-    "@typescript-eslint/no-namespace": [0],
     "@typescript-eslint/naming-convention": [
       `error`,
       {
-        selector: `interface`,
-        format: [`PascalCase`],
-        prefix: [`I`],
-      },
-      {
         selector: `variableLike`,
-        format: [`strictCamelCase`, `UPPER_CASE`],
+        format: [`strictCamelCase`, `UPPER_CASE`, `PascalCase`, `snake_case`],
         leadingUnderscore: `allow`,
       },
     ],
@@ -43,6 +43,7 @@ module.exports = {
         allowTypedFunctionExpressions: true,
       },
     ],
+    "import/no-cycle": [1],
     "import/order": [
       1,
       {

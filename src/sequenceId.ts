@@ -1,4 +1,4 @@
-import { Iterator } from ".";
+import { nextify } from "./Iterator";
 
 export function* sequenceIdGenerator(
   prefix: string,
@@ -10,4 +10,4 @@ export function* sequenceIdGenerator(
 }
 
 export const sequenceIdFn = (prefix: string, max = Infinity): (() => string) =>
-  Iterator.nextify(sequenceIdGenerator(prefix, max));
+  nextify(sequenceIdGenerator(prefix, max));

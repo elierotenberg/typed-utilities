@@ -1,9 +1,9 @@
-import * as Either from "./Either";
+import { Either, Left, Right } from "./Either";
 
-export type Option<T> = Either.Either<T, null>;
+export type Option<T> = Either<T, null>;
 
-export type Some<T> = Either.Left<T>;
-export type None = Either.Right<null>;
+export type Some<T> = Left<T>;
+export type None = Right<null>;
 
 function isSome<T>(option: Option<T>): option is Some<T> {
   return Either.is.left(option);
@@ -32,22 +32,22 @@ function assertNone(
 }
 const toSomeValue = <T>(option: Some<T>): T => option[1];
 
-export const is = {
+const is = {
   some: isSome,
   none: isNone,
 };
 
-export const assert = {
+const assert = {
   some: assertSome,
   none: assertNone,
 };
 
-export const of = {
+const of = {
   some: <T>(value: T): Some<T> => Either.of.left(value),
   none: (): None => Either.of.right(null),
 };
 
-export const to = {
+const to = {
   someValue: toSomeValue,
 };
 
@@ -56,7 +56,15 @@ type Match<T, IfSome, IfNone> = {
   readonly none: () => IfNone;
 };
 
-export const match = <T, IfSome, IfNone>(
+const match = <T, IfSome, IfNone>(
   option: Option<T>,
   match: Match<T, IfSome, IfNone>,
 ): IfSome | IfNone => (isSome(option) ? match.some(option[1]) : match.none());
+
+export const Option = {
+  is,
+  assert,
+  of,
+  to,
+  match,
+};

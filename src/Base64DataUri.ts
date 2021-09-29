@@ -3,6 +3,7 @@ export type IParsedBase64DataUri = Readonly<
 >;
 
 const base64DataUri = /^data:(.*);base64,(.*)/i;
+
 export const parseBase64DataUri = (
   input: string,
 ): null | IParsedBase64DataUri => {

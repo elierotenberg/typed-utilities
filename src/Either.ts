@@ -36,22 +36,22 @@ function assertRight<R>(
 const toLeftValue = <L>(either: Left<L>): L => either[1];
 const toRightValue = <R>(either: Right<R>): R => either[1];
 
-export const is = {
+const is = {
   left: isLeft,
   right: isRight,
 };
 
-export const to = {
+const to = {
   leftValue: toLeftValue,
   rightValue: toRightValue,
 };
 
-export const assert = {
+const assert = {
   left: assertLeft,
   right: assertRight,
 };
 
-export const of = {
+const of = {
   left: <L>(value: L): Left<L> => [EitherTag.Left, value],
   right: <R>(value: R): Right<R> => [EitherTag.Right, value],
 };
@@ -61,8 +61,16 @@ export type Match<L, R, IfLeft, IfRight> = {
   readonly right: (value: R) => IfRight;
 };
 
-export const match = <L, R, IfLeft, IfRight>(
+const match = <L, R, IfLeft, IfRight>(
   either: Either<L, R>,
   match: Match<L, R, IfLeft, IfRight>,
 ): IfLeft | IfRight =>
   isLeft(either) ? match.left(either[1]) : match.right(either[1]);
+
+export const Either = {
+  is,
+  to,
+  assert,
+  of,
+  match,
+};

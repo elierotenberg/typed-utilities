@@ -1,6 +1,4 @@
-import { ConcurrentError } from "./ConcurrentError";
-
-import { id } from ".";
+import { id } from "./id";
 
 export type MapAsync = <I, T>(
   items: readonly I[],
@@ -12,7 +10,7 @@ export const mapAsyncSerial: MapAsync = async <I, T>(
   fn: (item: I) => Promise<T>,
 ): Promise<T[]> => {
   const values: T[] = [];
-  const errors: Error[] = [];
+  const errors: unknown[] = [];
   for (const item of items) {
     try {
       values.push(await fn(item));
@@ -21,7 +19,7 @@ export const mapAsyncSerial: MapAsync = async <I, T>(
     }
   }
   if (errors.length > 0) {
-    throw new ConcurrentError(errors);
+    throw new AggregateError(errors);
   }
   return values;
 };
@@ -41,7 +39,7 @@ export const mapAsyncConcurrent: MapAsync = async <I, T>(
     }
   }
   if (errors.length > 0) {
-    throw new ConcurrentError(errors);
+    throw new AggregateError(errors);
   }
   return values;
 };
