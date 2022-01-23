@@ -604,6 +604,23 @@ const pipe = <T, U>(
     },
   });
 
+// "catch" identifier is reserved
+const $catch = <T, E, S>(
+  result: AsyncResult<T, E>,
+  fn: (error: E) => S,
+): AsyncResult<T | S> =>
+  AsyncResult.match(result, {
+    pending: () => AsyncResult.of.pending(),
+    rejected: (outerError) => {
+      try {
+        return of.resolved(fn(outerError));
+      } catch (innerError) {
+        return of.rejected(innerError);
+      }
+    },
+    resolved: (value) => AsyncResult.of.resolved(value),
+  });
+
 export const AsyncResult = {
   is,
   assert,
@@ -612,4 +629,5 @@ export const AsyncResult = {
   match,
   join,
   pipe,
+  catch: $catch,
 };

@@ -117,4 +117,25 @@ describe(`AsyncResult`, () => {
       }),
     ).toEqual(AsyncResult.of.rejected(error2));
   });
+
+  test(`catch`, () => {
+    expect(AsyncResult.catch(AsyncResult.of.pending(), () => 42)).toEqual(
+      AsyncResult.of.pending(),
+    );
+    expect(AsyncResult.catch(AsyncResult.of.resolved(1337), () => 42)).toEqual(
+      AsyncResult.of.resolved(1337),
+    );
+    const error1 = new Error(`error1`);
+    expect(
+      AsyncResult.catch(AsyncResult.of.rejected(error1), () => 42),
+    ).toEqual(AsyncResult.of.resolved(42));
+
+    const error2 = new Error(`error2`);
+
+    expect(
+      AsyncResult.catch(AsyncResult.of.rejected(error1), () => {
+        throw error2;
+      }),
+    ).toEqual(AsyncResult.of.rejected(error2));
+  });
 });
