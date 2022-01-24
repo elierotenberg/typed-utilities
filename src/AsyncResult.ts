@@ -11,6 +11,10 @@ export type AsyncResult<Value = unknown, Error = unknown> =
   | Pending
   | Rejected<Error>
   | Resolved<Value>;
+export type AsyncResultDependencyList<Value = unknown, Error = unknown> =
+  | readonly [tag: AsyncResultTag.Pending, value: null, error: null]
+  | readonly [tag: AsyncResultTag.Rejected, value: null, error: Error]
+  | readonly [tag: AsyncResultTag.Resolved, value: Value, error: null];
 
 function isPending(result: AsyncResult<unknown, unknown>): result is Pending {
   return result[0] === AsyncResultTag.Pending;
@@ -59,6 +63,14 @@ const resolvedValue = <Value = unknown>(resolved: Resolved<Value>): Value =>
   resolved[1];
 const rejectedError = <Error = unknown>(rejected: Rejected<Error>): Error =>
   rejected[1];
+const dependencyList = <Value = unknown, Error = unknown>(
+  result: AsyncResult<Value, Error>,
+): AsyncResultDependencyList<Value, Error> =>
+  match(result, {
+    pending: () => [AsyncResultTag.Pending, null, null],
+    rejected: (error) => [AsyncResultTag.Rejected, null, error],
+    resolved: (value) => [AsyncResultTag.Resolved, value, null],
+  });
 
 const is = {
   pending: isPending,
@@ -91,6 +103,7 @@ const of = {
 const to = {
   resolvedValue,
   rejectedError,
+  dependencyList,
 };
 
 type Match<
@@ -622,6 +635,7 @@ const $catch = <T, E, S>(
   });
 
 export const AsyncResult = {
+  Tag: AsyncResultTag,
   is,
   assert,
   of,

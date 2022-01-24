@@ -5,7 +5,7 @@ describe(`AsyncResult`, () => {
     const testError = new Error(`test error`);
     const pending = AsyncResult.of.pending();
     const rejected = AsyncResult.of.rejected(testError);
-    const resolved = AsyncResult.of.resolved(null);
+    const resolved = AsyncResult.of.resolved(42 as const);
     expect(AsyncResult.is.pending(pending)).toEqual(true);
     expect(AsyncResult.is.rejected(pending)).toEqual(false);
     expect(AsyncResult.is.resolved(pending)).toEqual(false);
@@ -28,17 +28,33 @@ describe(`AsyncResult`, () => {
     expect(() => AsyncResult.assert.resolved(resolved)).not.toThrow();
 
     expect(AsyncResult.to.rejectedError(rejected)).toEqual(testError);
-    expect(AsyncResult.to.resolvedValue(resolved)).toEqual(null);
+    expect(AsyncResult.to.resolvedValue(resolved)).toEqual(42);
+
+    expect(AsyncResult.to.dependencyList(pending)).toEqual([
+      AsyncResult.Tag.Pending,
+      null,
+      null,
+    ]);
+    expect(AsyncResult.to.dependencyList(resolved)).toEqual([
+      AsyncResult.Tag.Resolved,
+      42,
+      null,
+    ]);
+    expect(AsyncResult.to.dependencyList(rejected)).toEqual([
+      AsyncResult.Tag.Rejected,
+      null,
+      testError,
+    ]);
 
     const match = {
       pending: () => `pending`,
       rejected: (error: Error) => `error: ${error.message}`,
-      resolved: (value: null) => `value: ${value}`,
+      resolved: (value: 42) => `value: ${value}`,
     };
 
     expect(AsyncResult.match(pending, match)).toEqual(`pending`);
     expect(AsyncResult.match(rejected, match)).toEqual(`error: test error`);
-    expect(AsyncResult.match(resolved, match)).toEqual(`value: null`);
+    expect(AsyncResult.match(resolved, match)).toEqual(`value: 42`);
   });
 
   test(`join`, () => {
