@@ -44,6 +44,32 @@ export const mapAsyncConcurrent: MapAsync = async <I, T>(
   return values;
 };
 
+type MapEntriesAsync<T> = {
+  readonly [K in keyof T]: T[K] extends PromiseLike<infer U> ? U : T;
+};
+
+export const mapEntriesAsyncConcurrent = async <T>(
+  entries: T,
+): Promise<MapEntriesAsync<T>> => {
+  const resolvedEntries = await resolveAllConcurrent(
+    Object.entries(entries).map(
+      async ([key, value]) => [key, await value] as const,
+    ),
+  );
+  return Object.fromEntries(resolvedEntries) as MapEntriesAsync<T>;
+};
+
+export const mapEntriesAsyncSerial = async <T>(
+  entries: T,
+): Promise<MapEntriesAsync<T>> => {
+  const resolvedEntries = await resolveAllSerial(
+    Object.entries(entries).map(
+      async ([key, value]) => [key, await value] as const,
+    ),
+  );
+  return Object.fromEntries(resolvedEntries) as MapEntriesAsync<T>;
+};
+
 type ResolveAll = {
   (values: readonly []): Promise<[]>;
   <T1>(values: readonly [Promise<T1>]): Promise<[T1]>;

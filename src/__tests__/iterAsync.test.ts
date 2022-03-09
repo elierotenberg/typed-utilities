@@ -5,6 +5,7 @@ import {
   resolveAllConcurrent,
   resolveAllSerial,
 } from "..";
+import { mapEntriesAsyncConcurrent } from "../iterAsync";
 
 describe(`MapAsync`, () => {
   test(`mapAsyncSerial`, async () => {
@@ -62,6 +63,24 @@ describe(`MapAsync`, () => {
       AggregateError,
     );
     expect(countTrue).toEqual(6);
+  });
+
+  test(`mapAsyncEntriesConcurrent`, async () => {
+    await expect(mapEntriesAsyncConcurrent({})).resolves.toEqual({});
+    await expect(mapEntriesAsyncConcurrent({ a: 1 })).resolves.toEqual({
+      a: 1,
+    });
+    await expect(
+      mapEntriesAsyncConcurrent({ a: Promise.resolve(42) }),
+    ).resolves.toEqual({ a: 42 });
+
+    const input = {
+      a: Promise.resolve(42 as const),
+      b: null,
+      c: Promise.resolve(null),
+    } as const;
+    const output: { a: 42 } = await mapEntriesAsyncConcurrent(input);
+    expect(output.a).toEqual(42);
   });
 
   test(`resolveAllSerial, resolveAllConcurrent with identity (Promise.all-like)`, async () => {
