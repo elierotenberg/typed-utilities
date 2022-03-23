@@ -10,6 +10,7 @@ export * from "./ConstructorType";
 export * from "./deepTransform";
 export * from "./exponentialBackOff";
 export * from "./id";
+export * from "./interpolate";
 export * from "./iterAsync";
 export * from "./Iterator";
 export * from "./lazyMemo";
@@ -21,6 +22,7 @@ export * from "./RegExp";
 export * from "./sequenceId";
 export * from "./sleep";
 export * from "./sortByProperty";
+export * from "./tap";
 export * from "./useAsync";
 
 if (typeof AggregateError === `undefined`) {
