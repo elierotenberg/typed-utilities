@@ -14,6 +14,7 @@ export * from "./interpolate";
 export * from "./iterAsync";
 export * from "./Iterator";
 export * from "./lazyMemo";
+export * from "./Memo";
 export * from "./omit";
 export * from "./pick";
 export * from "./PromiseType";

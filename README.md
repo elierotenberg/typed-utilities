@@ -1,6 +1,6 @@
 # `typed-utilities`
 
-`typed-utilities` is a collection of strongly typed general purpose utilities.
+`typed-utilities` is a collection of strongly typed general purpose utilities. It's a bit like lodash, but with strongly-typed code in mind, and some useful idioms e.g. tagged tuples for encoding `Result`, etc.
 
 ### Install
 
