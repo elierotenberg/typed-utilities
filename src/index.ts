@@ -1,4 +1,5 @@
 export { AsyncLock } from "./AsyncLock";
+export { AsyncSemaphore } from "./AsyncSemaphore";
 export { AsyncResult } from "./AsyncResult";
 export { Deferred } from "./Deferred";
 export { Either } from "./Either";

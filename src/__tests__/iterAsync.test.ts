@@ -4,8 +4,8 @@ import {
   sleep,
   resolveAllConcurrent,
   resolveAllSerial,
+  mapEntriesAsyncConcurrent,
 } from "..";
-import { mapEntriesAsyncConcurrent } from "../iterAsync";
 
 describe(`MapAsync`, () => {
   test(`mapAsyncSerial`, async () => {
@@ -105,5 +105,24 @@ describe(`MapAsync`, () => {
       null,
       `hello`,
     ]);
+  });
+
+  test(`mapAsyncConcurrent with maxConcurrency`, async () => {
+    const items = [1, 2, 3, 4, 5];
+
+    let max = 0;
+    let current = 0;
+    const fn = async (n: number): Promise<number> => {
+      current++;
+      max = Math.max(max, current);
+      await sleep(1);
+      current--;
+      return 2 * n;
+    };
+    const result = await mapAsyncConcurrent(items, fn, { maxConcurrency: 3 });
+
+    expect(result).toEqual([2, 4, 6, 8, 10]);
+    expect(max).toEqual(3);
+    expect(current).toEqual(0);
   });
 });

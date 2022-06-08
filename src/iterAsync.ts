@@ -1,8 +1,14 @@
+import { AsyncSemaphore } from "./AsyncSemaphore";
 import { id } from "./id";
+
+type AsyncConcurrentOptions = {
+  readonly maxConcurrency?: number;
+};
 
 export type MapAsync = <I, T>(
   items: readonly I[],
   fn: (item: I) => Promise<T>,
+  opts?: AsyncConcurrentOptions,
 ) => Promise<T[]>;
 
 export const mapAsyncSerial: MapAsync = async <I, T>(
@@ -27,10 +33,16 @@ export const mapAsyncSerial: MapAsync = async <I, T>(
 export const mapAsyncConcurrent: MapAsync = async <I, T>(
   items: readonly I[],
   fn: (item: I) => Promise<T>,
+  opts?: AsyncConcurrentOptions,
 ): Promise<T[]> => {
   const values: T[] = [];
   const errors: Error[] = [];
-  const results = await Promise.allSettled(items.map(fn));
+  const semaphore = new AsyncSemaphore(
+    opts?.maxConcurrency ?? items.length + 1,
+  );
+  const results = await Promise.allSettled(
+    items.map(async (item) => semaphore.use(() => fn(item))),
+  );
   for (const result of results) {
     if (result.status === `fulfilled`) {
       values.push(result.value);
@@ -50,11 +62,13 @@ type MapEntriesAsync<T> = {
 
 export const mapEntriesAsyncConcurrent = async <T>(
   entries: T,
+  opts?: AsyncConcurrentOptions,
 ): Promise<MapEntriesAsync<T>> => {
   const resolvedEntries = await resolveAllConcurrent(
     Object.entries(entries).map(
       async ([key, value]) => [key, await value] as const,
     ),
+    opts,
   );
   return Object.fromEntries(resolvedEntries) as MapEntriesAsync<T>;
 };
@@ -71,14 +85,21 @@ export const mapEntriesAsyncSerial = async <T>(
 };
 
 type ResolveAll = {
-  (values: readonly []): Promise<[]>;
-  <T1>(values: readonly [Promise<T1>]): Promise<[T1]>;
-  <T1, T2>(values: readonly [Promise<T1>, Promise<T2>]): Promise<[T1, T2]>;
+  (values: readonly [], opts?: AsyncConcurrentOptions): Promise<[]>;
+  <T1>(values: readonly [Promise<T1>], opts?: AsyncConcurrentOptions): Promise<
+    [T1]
+  >;
+  <T1, T2>(
+    values: readonly [Promise<T1>, Promise<T2>],
+    opts?: AsyncConcurrentOptions,
+  ): Promise<[T1, T2]>;
   <T1, T2, T3>(
     values: readonly [Promise<T1>, Promise<T2>, Promise<T3>],
+    opts?: AsyncConcurrentOptions,
   ): Promise<[T1, T2, T3]>;
   <T1, T2, T3, T4>(
     values: readonly [Promise<T1>, Promise<T2>, Promise<T3>, Promise<T4>],
+    opts?: AsyncConcurrentOptions,
   ): Promise<[T1, T2, T3, T4]>;
   <T1, T2, T3, T4, T5>(
     values: readonly [
@@ -88,6 +109,7 @@ type ResolveAll = {
       Promise<T4>,
       Promise<T5>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<[T1, T2, T3, T4, T5]>;
   <T1, T2, T3, T4, T5, T6>(
     values: readonly [
@@ -98,6 +120,7 @@ type ResolveAll = {
       Promise<T5>,
       Promise<T6>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<[T1, T2, T3, T4, T5, T6]>;
   <T1, T2, T3, T4, T5, T6, T7>(
     values: readonly [
@@ -109,6 +132,7 @@ type ResolveAll = {
       Promise<T6>,
       Promise<T7>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<[T1, T2, T3, T4, T5, T6, T7]>;
   <T1, T2, T3, T4, T5, T6, T7, T8>(
     values: readonly [
@@ -134,6 +158,7 @@ type ResolveAll = {
       Promise<T8>,
       Promise<T9>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9]>;
   <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
     values: readonly [
@@ -148,6 +173,7 @@ type ResolveAll = {
       Promise<T9>,
       Promise<T10>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>;
   <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
     values: readonly [
@@ -163,6 +189,7 @@ type ResolveAll = {
       Promise<T10>,
       Promise<T11>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11]>;
   <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
     values: readonly [
@@ -179,6 +206,7 @@ type ResolveAll = {
       Promise<T11>,
       Promise<T12>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12]>;
   <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
     values: readonly [
@@ -196,6 +224,7 @@ type ResolveAll = {
       Promise<T12>,
       Promise<T13>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13]>;
   <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
     values: readonly [
@@ -214,6 +243,7 @@ type ResolveAll = {
       Promise<T13>,
       Promise<T14>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14]>;
   <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
     values: readonly [
@@ -233,6 +263,7 @@ type ResolveAll = {
       Promise<T14>,
       Promise<T15>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<
     [T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15]
   >;
@@ -255,6 +286,7 @@ type ResolveAll = {
       Promise<T15>,
       Promise<T16>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<
     [T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16]
   >;
@@ -278,6 +310,7 @@ type ResolveAll = {
       Promise<T16>,
       Promise<T17>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<
     [T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17]
   >;
@@ -321,6 +354,7 @@ type ResolveAll = {
       Promise<T17>,
       Promise<T18>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<
     [
       T1,
@@ -385,6 +419,7 @@ type ResolveAll = {
       Promise<T18>,
       Promise<T19>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<
     [
       T1,
@@ -452,6 +487,7 @@ type ResolveAll = {
       Promise<T19>,
       Promise<T20>,
     ],
+    opts?: AsyncConcurrentOptions,
   ): Promise<
     [
       T1,
@@ -476,10 +512,14 @@ type ResolveAll = {
       T20,
     ]
   >;
-  <T>(values: readonly Promise<T>[]): Promise<T[]>;
+  <T>(values: readonly Promise<T>[], opts?: AsyncConcurrentOptions): Promise<
+    T[]
+  >;
 };
 export const resolveAllSerial = ((values: readonly Promise<unknown>[]) =>
   mapAsyncSerial(values, id)) as unknown as ResolveAll;
 
-export const resolveAllConcurrent = ((values: readonly Promise<unknown>[]) =>
-  mapAsyncConcurrent(values, id)) as unknown as ResolveAll;
+export const resolveAllConcurrent = ((
+  values: readonly Promise<unknown>[],
+  opts?: AsyncConcurrentOptions,
+) => mapAsyncConcurrent(values, id, opts)) as unknown as ResolveAll;
